@@ -22,29 +22,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#0a0f1a]">
+      <body className="min-h-full flex flex-col bg-zinc-50">
         {/* Navbar */}
-        <nav className="sticky top-0 z-50 border-b border-slate-800/80 bg-[#0a0f1a]/80 backdrop-blur-xl">
+        <nav className="sticky top-0 z-50 border-b border-zinc-200/80 bg-white/80 backdrop-blur-xl shadow-sm">
           <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2.5 group">
               <span className="text-2xl">🏠</span>
-              <span className="font-bold text-lg text-white group-hover:text-teal-400 transition-colors">
+              <span className="font-bold text-lg text-zinc-900 group-hover:text-violet-600 transition-colors">
                 RateMyLandlord
               </span>
-              <span className="hidden sm:inline px-2 py-0.5 rounded-md bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-medium">
+              <span className="hidden sm:inline px-2 py-0.5 rounded-md bg-violet-600/10 border border-violet-600/20 text-violet-700 text-xs font-medium">
                 INDIA
               </span>
             </Link>
             <div className="flex items-center gap-3">
               <Link
                 href="/search?q="
-                className="text-sm text-slate-400 hover:text-white transition-colors px-3 py-2"
+                className="text-sm text-zinc-600 hover:text-zinc-900 transition-colors px-3 py-2 font-medium"
               >
                 Search
               </Link>
               <Link
                 href="/submit"
-                className="text-sm font-semibold bg-teal-500 hover:bg-teal-400 text-slate-950 px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/25"
+                className="text-sm font-semibold bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-[0_4px_12px_rgba(124,58,237,0.25)]"
               >
                 Write a Review
               </Link>
@@ -56,15 +56,15 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
 
         {/* Footer */}
-        <footer className="border-t border-slate-800/50 bg-[#060a14]">
+        <footer className="border-t border-zinc-200 bg-white">
           <div className="max-w-6xl mx-auto px-4 py-8">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-zinc-500">
               <p>© 2026 Rate My Landlord India. Built for tenants, by tenants.</p>
               <div className="flex items-center gap-6">
-                <Link href="/submit" className="hover:text-slate-300 transition-colors">
+                <Link href="/submit" className="hover:text-zinc-900 transition-colors font-medium">
                   Submit Review
                 </Link>
-                <Link href="/search?q=" className="hover:text-slate-300 transition-colors">
+                <Link href="/search?q=" className="hover:text-zinc-900 transition-colors font-medium">
                   Search Landlords
                 </Link>
               </div>

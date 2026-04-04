@@ -48,17 +48,17 @@ export default function RedFlagTags({
               transition-all duration-200 border
               ${
                 isSelected
-                  ? "bg-red-500/15 border-red-500/30 text-red-400 shadow-[0_0_12px_rgba(239,68,68,0.1)]"
+                  ? "bg-rose-50 border-rose-200 text-rose-700 shadow-sm"
                   : readonly
-                  ? "bg-slate-800/50 border-slate-700/50 text-slate-400"
-                  : "bg-slate-800/50 border-slate-700/50 text-slate-400 hover:bg-red-500/10 hover:border-red-500/20 hover:text-red-400 cursor-pointer"
+                  ? "bg-zinc-50 border-zinc-200 text-zinc-500"
+                  : "bg-white border-zinc-200 text-zinc-600 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-600 cursor-pointer shadow-sm"
               }
             `}
           >
             <span>{flag.emoji}</span>
             <span>{flag.label}</span>
             {count !== undefined && count > 0 && (
-              <span className="ml-0.5 px-1.5 py-0.5 rounded-full bg-red-500/20 text-red-300 text-xs font-bold">
+              <span className="ml-0.5 px-1.5 py-0.5 rounded-full bg-rose-100 text-rose-700 text-xs font-bold">
                 {count}
               </span>
             )}

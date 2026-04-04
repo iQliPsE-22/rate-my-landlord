@@ -56,15 +56,15 @@ export function cn(...classes: (string | boolean | undefined | null)[]): string 
 }
 
 export function getScoreColor(score: number): string {
-  if (score >= 4) return "text-emerald-400";
-  if (score >= 3) return "text-amber-400";
-  if (score >= 2) return "text-orange-400";
-  return "text-red-400";
+  if (score >= 4) return "text-emerald-600";
+  if (score >= 3) return "text-amber-500";
+  if (score >= 2) return "text-orange-500";
+  return "text-rose-600";
 }
 
 export function getScoreBg(score: number): string {
-  if (score >= 4) return "bg-emerald-400/10 border-emerald-400/20";
-  if (score >= 3) return "bg-amber-400/10 border-amber-400/20";
-  if (score >= 2) return "bg-orange-400/10 border-orange-400/20";
-  return "bg-red-400/10 border-red-400/20";
+  if (score >= 4) return "bg-emerald-50 border-emerald-100";
+  if (score >= 3) return "bg-amber-50 border-amber-100";
+  if (score >= 2) return "bg-orange-50 border-orange-100";
+  return "bg-rose-50 border-rose-100";
 }

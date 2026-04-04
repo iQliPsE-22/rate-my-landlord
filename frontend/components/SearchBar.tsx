@@ -29,19 +29,19 @@ export default function SearchBar({ defaultQuery = "", defaultCity = "", compact
     <form onSubmit={handleSearch} className={`w-full ${compact ? "max-w-2xl" : "max-w-3xl"}`}>
       <div className={`
         flex flex-col sm:flex-row gap-3
-        ${compact ? "" : "p-2 bg-slate-800/60 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-2xl shadow-black/20"}
+        ${compact ? "" : "p-2 bg-white/60 backdrop-blur-xl rounded-2xl border border-zinc-200 shadow-[0_8px_30px_rgba(0,0,0,0.06)]"}
       `}>
-        <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+        <div className="relative flex-1 group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400 group-focus-within:text-violet-500 transition-colors pointer-events-none" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Landlord name..."
             className={`
-              w-full pl-12 pr-4 bg-slate-900/80 text-white placeholder-slate-500
-              border border-slate-700/50 focus:border-teal-500/50 focus:ring-2 focus:ring-teal-500/20
-              outline-none transition-all duration-200
+              w-full pl-12 pr-4 bg-white text-zinc-900 placeholder-zinc-400
+              border border-zinc-200 focus:border-violet-500 focus:ring-[3px] focus:ring-violet-500/20
+              outline-none transition-all duration-200 shadow-sm
               ${compact ? "h-11 rounded-xl text-sm" : "h-14 rounded-xl text-base"}
             `}
           />
@@ -50,9 +50,9 @@ export default function SearchBar({ defaultQuery = "", defaultCity = "", compact
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className={`
-            bg-slate-900/80 text-white border border-slate-700/50
-            focus:border-teal-500/50 focus:ring-2 focus:ring-teal-500/20
-            outline-none transition-all duration-200 cursor-pointer
+            bg-white text-zinc-900 border border-zinc-200
+            focus:border-violet-500 focus:ring-[3px] focus:ring-violet-500/20
+            outline-none transition-all duration-200 cursor-pointer shadow-sm
             ${compact ? "h-11 rounded-xl text-sm px-3 sm:w-40" : "h-14 rounded-xl text-base px-4 sm:w-48"}
           `}
         >
@@ -75,8 +75,8 @@ export default function SearchBar({ defaultQuery = "", defaultCity = "", compact
         <button
           type="submit"
           className={`
-            bg-teal-500 hover:bg-teal-400 text-slate-950 font-semibold
-            rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/25
+            bg-violet-600 hover:bg-violet-700 text-white font-semibold
+            rounded-xl transition-all duration-200 hover:shadow-[0_4px_12px_rgba(124,58,237,0.25)]
             active:scale-[0.98]
             ${compact ? "h-11 px-6 text-sm" : "h-14 px-8 text-base"}
           `}

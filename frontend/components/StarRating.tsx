@@ -42,8 +42,8 @@ export default function StarRating({
             className={`
               ${readonly ? "cursor-default" : "cursor-pointer hover:scale-110"}
               transition-all duration-150 ease-out
-              ${filled ? "text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.4)]" : "text-slate-600"}
-              ${halfFilled ? "text-amber-400/60" : ""}
+              ${filled ? "text-amber-500" : "text-zinc-200"}
+              ${halfFilled ? "text-amber-500/60" : ""}
             `}
             onClick={() => onChange?.(star)}
             onMouseEnter={() => !readonly && setHoverValue(star)}
@@ -52,13 +52,13 @@ export default function StarRating({
             <Star
               className={`${sizeClasses[size]} transition-all duration-150`}
               fill={filled || halfFilled ? "currentColor" : "none"}
-              strokeWidth={filled || halfFilled ? 0 : 1.5}
+              strokeWidth={filled || halfFilled ? 0 : 2}
             />
           </button>
         );
       })}
       {showValue && value > 0 && (
-        <span className="ml-1.5 text-sm font-semibold text-slate-300 tabular-nums">
+        <span className="ml-1.5 text-sm font-semibold text-zinc-700 tabular-nums">
           {value.toFixed(1)}
         </span>
       )}
