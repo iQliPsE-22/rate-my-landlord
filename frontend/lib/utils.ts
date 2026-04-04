@@ -1,7 +1,7 @@
 // Replace utility functions completely
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import type { RatingAxes, AggregateScore } from "@/types";
+import type { RatingAxes, AggregateScore, IReview } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -40,13 +40,37 @@ export function getScoreBg(score: number): string {
   return "bg-[#FEF2F2] border-[#FCA5A5] border";               // red-50, red-300
 }
 
-export function generateSlug(name: string, city: string): string {
-  const base = `${name} ${city}`.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+export function generateSlug(name: string, city: string, pincode?: string): string {
+  const parts = [name, city];
+  if (pincode) parts.push(pincode);
+  const base = parts.join("-").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   return `${base}-${Math.random().toString(36).substring(2, 6)}`;
 }
 
-export function calculateAggregateScore(ratings: RatingAxes): AggregateScore {
-  const values = Object.values(ratings);
-  const overall = values.reduce((a, b) => a + b, 0) / values.length;
-  return { ...ratings, overall };
+export function calculateAggregateScore(reviews: IReview[]): AggregateScore {
+  if (!reviews || reviews.length === 0) {
+    return { overall: 0, deposit_return: 0, maintenance: 0, behaviour: 0, rent_fairness: 0 };
+  }
+  
+  const axes = ["deposit_return", "maintenance", "behaviour", "rent_fairness"] as const;
+  const totals = { deposit_return: 0, maintenance: 0, behaviour: 0, rent_fairness: 0 };
+  
+  for (const review of reviews) {
+    for (const axis of axes) {
+      if (review.ratings?.[axis]) {
+        totals[axis] += review.ratings[axis];
+      }
+    }
+  }
+
+  const result: any = { overall: 0 };
+  let overallSum = 0;
+  for (const axis of axes) {
+    const avg = totals[axis] / reviews.length;
+    result[axis] = avg;
+    overallSum += avg;
+  }
+  result.overall = overallSum / axes.length;
+  
+  return result as AggregateScore;
 }
