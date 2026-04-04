@@ -8,6 +8,7 @@ interface ReviewItemProps {
 
 export default function ReviewItem({ review }: ReviewItemProps) {
   const flags = review.red_flags.map((id) => RED_FLAGS.find((f) => f.id === id)).filter(Boolean);
+  const overallScore = Object.values(review.ratings).reduce((a, b) => a + b, 0) / 4;
 
   return (
     <div className="group pl-0 sm:pl-6 border-l-2 transition-colors duration-300" style={{ borderColor: "var(--border)" }} onMouseEnter={(e) => e.currentTarget.style.borderColor = "var(--text)"} onMouseLeave={(e) => e.currentTarget.style.borderColor = "var(--border)"}>
@@ -15,10 +16,10 @@ export default function ReviewItem({ review }: ReviewItemProps) {
       {/* Meta Header */}
       <div className="flex flex-wrap items-center gap-3 mb-6 text-xs font-bold tracking-widest uppercase">
         <span className="bg-stone-900 text-white px-2 py-1 rounded-sm">
-          Rating: {review.ratings.overall.toFixed(1)}
+          Rating: {overallScore.toFixed(1)}
         </span>
         <span style={{ color: "var(--text-muted)" }}>
-          {formatDate(review.createdAt!)}
+          {formatDate(review.created_at || new Date())}
         </span>
         {review.tenancy_period && (
           <>
@@ -41,7 +42,6 @@ export default function ReviewItem({ review }: ReviewItemProps) {
         {/* Left: Ratings Grid */}
         <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-sm">
           {(Object.entries(review.ratings) as [keyof typeof RATING_LABELS, number][]).map(([key, val]) => {
-            if (key === "overall") return null;
             return (
               <div key={key} className="flex justify-between">
                 <span className="text-stone-500 font-medium">{RATING_LABELS[key]}</span>

@@ -1,6 +1,7 @@
 // Replace utility functions completely
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import type { RatingAxes, AggregateScore } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -37,4 +38,15 @@ export function getScoreBg(score: number): string {
   if (score >= 3) return "bg-[#FFF7ED] border-[#FFEDD5] border"; // orange-50, orange-100
   if (score >= 2) return "bg-[#FEF2F2] border-[#FECACA] border"; // red-50, red-200
   return "bg-[#FEF2F2] border-[#FCA5A5] border";               // red-50, red-300
+}
+
+export function generateSlug(name: string, city: string): string {
+  const base = `${name} ${city}`.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  return `${base}-${Math.random().toString(36).substring(2, 6)}`;
+}
+
+export function calculateAggregateScore(ratings: RatingAxes): AggregateScore {
+  const values = Object.values(ratings);
+  const overall = values.reduce((a, b) => a + b, 0) / values.length;
+  return { ...ratings, overall };
 }

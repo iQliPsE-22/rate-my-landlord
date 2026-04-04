@@ -122,14 +122,14 @@ export default function LandlordPage() {
               <h2 className="text-2xl font-bold" style={{ color: "var(--text)" }}>Tenant Testimonies</h2>
             </div>
             
-            {landlord.reviews.length === 0 ? (
+            {!landlord.reviews || landlord.reviews.length === 0 ? (
               <div className="p-8 border text-center" style={{ borderColor: "var(--border)", background: "var(--card)", borderRadius: "4px" }}>
                 <p className="font-medium" style={{ color: "var(--text-secondary)" }}>No reviews filed yet.</p>
               </div>
             ) : (
               <div className="space-y-12">
-                {landlord.reviews.map((review) => (
-                  <ReviewItem key={(review as any)._id || Math.random()} review={review} />
+                {landlord.reviews.map((review: IReview) => (
+                  <ReviewItem key={review._id || Math.random()} review={review} />
                 ))}
               </div>
             )}
@@ -150,7 +150,7 @@ export default function LandlordPage() {
             <div>
               <h3 className="text-xs font-bold uppercase tracking-widest mb-6" style={{ color: "var(--text-secondary)" }}>Assessment Breakdown</h3>
               <div className="space-y-5">
-                {(Object.entries(landlord.aggregate_score) as [keyof typeof RATING_LABELS, number][]).map(([key, val]) => {
+                {(Object.entries(landlord.aggregate_score) as [keyof import("@/types").AggregateScore, number][]).map(([key, val]) => {
                   if (key === "overall") return null;
                   return (
                     <div key={key}>

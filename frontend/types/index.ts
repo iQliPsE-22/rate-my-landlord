@@ -28,6 +28,7 @@ export interface ILandlord {
   review_count: number;
   aggregate_score: AggregateScore;
   red_flag_counts: RedFlagCounts;
+  reviews?: IReview[];
   created_at: string;
   updated_at: string;
 }
