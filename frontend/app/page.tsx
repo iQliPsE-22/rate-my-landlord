@@ -1,102 +1,98 @@
 import Link from "next/link";
-import { Shield, Search, Star, AlertTriangle, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import SearchBar from "@/components/SearchBar";
 
 export default function Home() {
   return (
-    <div className="bg-grid">
-      {/* Hero */}
-      <section className="relative max-w-6xl mx-auto px-4 pt-20 pb-24 sm:pt-32 sm:pb-32">
-        <div className="relative text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-100 border border-violet-200 text-violet-700 text-sm font-semibold mb-8 shadow-sm">
-            <Shield className="w-4 h-4" />
-            100% Anonymous. No Login Required.
+    <div className="flex flex-col">
+      {/* Hero — Left Aligned, Editorial Style */}
+      <section className="px-6 pt-24 pb-32 max-w-5xl mx-auto w-full">
+        <div className="max-w-2xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 mb-8 border" style={{ borderColor: "var(--border)", background: "var(--card)", borderRadius: "2px" }}>
+            <span className="w-2 h-2 rounded-full" style={{ background: "var(--success)" }}></span>
+            <span className="text-xs font-bold tracking-widest uppercase" style={{ color: "var(--text-secondary)" }}>
+              100% Anonymous Reviews
+            </span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-zinc-900 leading-[1.1] tracking-tight">
-            Know your landlord
-            <br />
-            <span className="text-gradient">before you sign</span>
+          <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight leading-[1.05] mb-8" style={{ color: "var(--text)" }}>
+            Trust takes years.<br />
+            Reviews take <span style={{ color: "var(--accent)" }}>minutes.</span>
           </h1>
 
-          <p className="mt-6 text-lg sm:text-xl text-zinc-600 max-w-2xl mx-auto leading-relaxed font-medium">
-            Search tenant reviews for any landlord in India. Or share your own experience to protect the next tenant.
+          <p className="text-lg sm:text-xl font-medium leading-relaxed mb-12 max-w-xl" style={{ color: "var(--text-secondary)" }}>
+            Don't sign a lease blindly. Search verified tenant experiences across India to uncover hidden red flags before you move in.
           </p>
 
-          {/* Search Bar */}
-          <div className="mt-10 flex justify-center">
+          <div className="mb-10 w-full max-w-xl">
             <SearchBar />
           </div>
 
-          {/* CTA */}
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/submit"
-              className="group flex items-center gap-2 text-violet-600 hover:text-violet-700 font-semibold transition-colors"
-            >
-              Had a bad experience? Write a review
+          <p className="text-sm font-medium flex items-center gap-2" style={{ color: "var(--text-secondary)" }}>
+            Had a nightmare landlord?
+            <Link href="/submit" className="font-bold underline underline-offset-4 decoration-2" style={{ color: "var(--accent)", textDecorationColor: "var(--accent-surface)" }}>
+              Warn the next tenant.
+            </Link>
+          </p>
+        </div>
+      </section>
+
+      {/* How It Works — Numbered Editorial Steps */}
+      <section className="py-24 border-t" style={{ borderColor: "var(--border)", background: "var(--card)" }}>
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="flex flex-col sm:flex-row justify-between items-end mb-16 gap-4">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight" style={{ color: "var(--text)" }}>
+              The transparency standard.
+            </h2>
+            <Link href="/search?q=" className="text-sm font-bold flex items-center gap-1 group" style={{ color: "var(--accent)" }}>
+              Browse all landlords
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-        </div>
-      </section>
 
-      {/* How It Works */}
-      <section className="max-w-6xl mx-auto px-4 pb-24">
-        <h2 className="text-center text-3xl font-extrabold text-zinc-900 mb-12">How it works</h2>
-        <div className="grid sm:grid-cols-3 gap-8">
-          {[
-            {
-              icon: <Star className="w-7 h-7 text-amber-500" />,
-              title: "Rate your landlord",
-              desc: "Score them on deposit return, maintenance, behaviour, and rent fairness. Add red flag tags if they deserve it.",
-            },
-            {
-              icon: <Search className="w-7 h-7 text-violet-500" />,
-              title: "Search before you sign",
-              desc: "Entering a new rental? Search the landlord's name and city. Read what past tenants experienced.",
-            },
-            {
-              icon: <AlertTriangle className="w-7 h-7 text-rose-500" />,
-              title: "Protect the next tenant",
-              desc: "Every review you leave makes the rental market a little more transparent for the next person.",
-            },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="p-8 rounded-2xl bg-white border border-zinc-200 hover:border-violet-200 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 group"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                {item.icon}
-              </div>
-              <h3 className="text-xl font-bold text-zinc-900 mb-3">{item.title}</h3>
-              <p className="text-zinc-600 leading-relaxed font-medium">{item.desc}</p>
+          <div className="grid sm:grid-cols-3 gap-x-12 gap-y-16">
+            <div>
+              <div className="text-6xl font-black mb-6 accent-number">01</div>
+              <h3 className="text-xl font-bold mb-3" style={{ color: "var(--text)" }}>Search Your Next Home</h3>
+              <p className="font-medium leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                Enter a landlord's name and city. Read unfiltered experiences about deposit retention, maintenance, and behavior.
+              </p>
             </div>
-          ))}
+            <div>
+              <div className="text-6xl font-black mb-6 accent-number">02</div>
+              <h3 className="text-xl font-bold mb-3" style={{ color: "var(--text)" }}>Spot The Red Flags</h3>
+              <p className="font-medium leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                Look for recurring patterns. Our red flag system highlights severe issues like harassment or illegal lockouts instantly.
+              </p>
+            </div>
+            <div>
+              <div className="text-6xl font-black mb-6 accent-number">03</div>
+              <h3 className="text-xl font-bold mb-3" style={{ color: "var(--text)" }}>Protect The Community</h3>
+              <p className="font-medium leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                Moved out? Leave an anonymous review. It takes 2 minutes and could save someone from a year-long financial trap.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Bottom CTA */}
-      <section className="max-w-6xl mx-auto px-4 pb-24">
-        <div className="text-center p-12 rounded-3xl bg-white border border-zinc-200 shadow-[0_8px_40px_rgba(0,0,0,0.04)] relative overflow-hidden">
-          {/* Decorative background accent */}
-          <div className="absolute top-0 right-0 p-32 bg-violet-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-60"></div>
-          
-          <div className="relative z-10">
-            <h2 className="text-3xl font-extrabold text-zinc-900 mb-4">
-              Had a landlord nightmare?
-            </h2>
-            <p className="text-zinc-600 mb-8 max-w-lg mx-auto font-medium text-lg">
-              Your anonymous review could save someone from the same experience. It takes less than 2 minutes.
-            </p>
-            <Link
-              href="/submit"
-              className="inline-flex items-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white font-semibold px-8 py-3.5 rounded-xl transition-all duration-200 hover:shadow-[0_8px_20px_rgba(24,24,27,0.2)]"
-            >
-              Write a Review
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
+      {/* Bottom CTA — Heavy, Confident */}
+      <section className="py-32" style={{ background: "var(--text)" }}>
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <h2 className="text-4xl sm:text-5xl font-extrabold text-white mb-6 tracking-tight">
+            Silence protects bad landlords.
+          </h2>
+          <p className="text-xl font-medium mb-12" style={{ color: "var(--text-muted)" }}>
+            Contribute to the largest database of rental experiences in India. Your identity is never exposed.
+          </p>
+          <Link
+            href="/submit"
+            className="inline-flex items-center gap-2 font-bold px-8 py-4 rounded-none transition-transform hover:-translate-y-1"
+            style={{ background: "var(--accent)", color: "white" }}
+          >
+            Submit an Anonymous Review
+            <ArrowRight className="w-5 h-5" />
+          </Link>
         </div>
       </section>
     </div>

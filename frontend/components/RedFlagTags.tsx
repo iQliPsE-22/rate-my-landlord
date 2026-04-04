@@ -1,67 +1,39 @@
-"use client";
-
 import { RED_FLAGS } from "@/types";
 import type { RedFlagId } from "@/types";
 
 interface RedFlagTagsProps {
-  selected?: RedFlagId[];
-  onChange?: (flags: RedFlagId[]) => void;
-  readonly?: boolean;
-  counts?: Record<string, number>;
+  selected: RedFlagId[];
+  onChange: (selected: RedFlagId[]) => void;
 }
 
-export default function RedFlagTags({
-  selected = [],
-  onChange,
-  readonly = false,
-  counts,
-}: RedFlagTagsProps) {
-  const handleToggle = (id: RedFlagId) => {
-    if (readonly || !onChange) return;
+export default function RedFlagTags({ selected, onChange }: RedFlagTagsProps) {
+  const toggle = (id: RedFlagId) => {
     if (selected.includes(id)) {
-      onChange(selected.filter((f) => f !== id));
+      onChange(selected.filter((s) => s !== id));
     } else {
       onChange([...selected, id]);
     }
   };
 
-  const flagsToShow = readonly
-    ? RED_FLAGS.filter((f) => selected.includes(f.id) || (counts && counts[f.id] > 0))
-    : RED_FLAGS;
-
-  if (flagsToShow.length === 0) return null;
-
   return (
-    <div className="flex flex-wrap gap-2">
-      {flagsToShow.map((flag) => {
+    <div className="flex flex-wrap gap-3">
+      {RED_FLAGS.map((flag) => {
         const isSelected = selected.includes(flag.id);
-        const count = counts?.[flag.id];
-
         return (
           <button
             key={flag.id}
             type="button"
-            disabled={readonly}
-            onClick={() => handleToggle(flag.id)}
+            onClick={() => toggle(flag.id)}
             className={`
-              inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium
-              transition-all duration-200 border
-              ${
-                isSelected
-                  ? "bg-rose-50 border-rose-200 text-rose-700 shadow-sm"
-                  : readonly
-                  ? "bg-zinc-50 border-zinc-200 text-zinc-500"
-                  : "bg-white border-zinc-200 text-zinc-600 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-600 cursor-pointer shadow-sm"
+              px-4 py-3 rounded-sm text-sm font-bold border transition-all duration-200 text-left flex items-center gap-3
+              ${isSelected 
+                ? "bg-red-50 border-red-600 text-red-700 shadow-[2px_2px_0px_rgba(220,38,38,1)]" 
+                : "bg-white border-stone-200 text-stone-600 hover:border-stone-400"
               }
             `}
           >
-            <span>{flag.emoji}</span>
+            <span className="text-xl">{flag.emoji}</span>
             <span>{flag.label}</span>
-            {count !== undefined && count > 0 && (
-              <span className="ml-0.5 px-1.5 py-0.5 rounded-full bg-rose-100 text-rose-700 text-xs font-bold">
-                {count}
-              </span>
-            )}
           </button>
         );
       })}

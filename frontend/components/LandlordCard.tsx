@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Star, MessageSquare, AlertTriangle } from "lucide-react";
 import { getScoreColor } from "@/lib/utils";
 import type { ILandlord } from "@/types";
 import { RED_FLAGS } from "@/types";
@@ -18,53 +17,58 @@ export default function LandlordCard({ landlord }: LandlordCardProps) {
   return (
     <Link
       href={`/landlord/${landlord.slug}`}
-      className="group block p-6 bg-white border border-zinc-200 rounded-2xl
-        hover:border-violet-200 transition-all duration-300
-        hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:-translate-y-0.5"
+      className="block p-6 sm:p-8 border bg-white group transition-colors duration-200"
+      style={{ borderColor: "var(--border)", borderRadius: "4px" }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = "var(--text-muted)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "var(--border)";
+      }}
     >
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex-1 min-w-0">
-          <h3 className="text-xl font-bold text-zinc-900 truncate group-hover:text-violet-600 transition-colors">
-            {landlord.name}
-          </h3>
-          <p className="text-sm font-medium text-zinc-500 mt-1">{landlord.city}</p>
-          {landlord.pincodes.length > 0 && (
-            <p className="text-xs text-zinc-400 mt-1">{landlord.pincodes.join(", ")}</p>
-          )}
-        </div>
-        <div className="flex flex-col items-end gap-1">
-          <div className={`text-2xl font-bold tabular-nums ${getScoreColor(score)}`}>
-            {score > 0 ? score.toFixed(1) : "—"}
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <h3 className="text-2xl font-bold tracking-tight" style={{ color: "var(--text)" }}>
+              {landlord.name}
+            </h3>
+            {landlord.review_count > 0 && (
+              <span className="px-2 py-0.5 text-xs font-bold uppercase tracking-wider" style={{ background: "var(--bg)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: "2px" }}>
+                {landlord.review_count} {landlord.review_count === 1 ? "Review" : "Reviews"}
+              </span>
+            )}
           </div>
-          <div className="flex items-center gap-1">
-            {[1, 2, 3, 4, 5].map((s) => (
-              <Star
-                key={s}
-                className={`w-4 h-4 ${s <= Math.round(score) ? "text-amber-500" : "text-zinc-200"}`}
-                fill={s <= Math.round(score) ? "currentColor" : "none"}
-                strokeWidth={s <= Math.round(score) ? 0 : 2}
-              />
-            ))}
+          
+          <div className="text-sm font-medium flex items-center gap-2 mb-4" style={{ color: "var(--text-secondary)" }}>
+            <span className="text-base">📍</span> {landlord.city}
+            {landlord.pincodes.length > 0 && (
+              <>
+                <span>·</span>
+                <span style={{ color: "var(--text-muted)" }}>{landlord.pincodes.join(", ")}</span>
+              </>
+            )}
           </div>
-        </div>
-      </div>
 
-      <div className="flex items-center gap-4 mt-5 pt-4 border-t border-zinc-100">
-        <div className="flex items-center gap-1.5 text-sm font-medium text-zinc-500">
-          <MessageSquare className="w-4 h-4" />
-          <span>{landlord.review_count} {landlord.review_count === 1 ? "review" : "reviews"}</span>
-        </div>
-        {topFlags.length > 0 && (
-          <div className="flex items-center gap-1.5 text-sm font-medium text-rose-600">
-            <AlertTriangle className="w-4 h-4" />
-            <span>
+          {topFlags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
               {topFlags.map(([id]) => {
                 const flag = RED_FLAGS.find((f) => f.id === id);
-                return flag?.emoji;
-              }).join(" ")}
-            </span>
+                return (
+                  <span key={id} className="text-xs font-bold px-2 py-1 rounded-sm" style={{ background: "var(--accent-surface)", color: "var(--accent)", border: "1px solid rgba(194,65,12,0.15)" }}>
+                    {flag?.emoji} {flag?.label}
+                  </span>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="flex-shrink-0 text-center px-6 py-4 rounded-sm border" style={{ borderColor: "var(--border)", background: "var(--bg)" }}>
+          <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: "var(--text-secondary)" }}>Rating</div>
+          <div className={`text-4xl font-black accent-number ${getScoreColor(score)}`}>
+            {score > 0 ? score.toFixed(1) : "—"}
           </div>
-        )}
+        </div>
       </div>
     </Link>
   );
