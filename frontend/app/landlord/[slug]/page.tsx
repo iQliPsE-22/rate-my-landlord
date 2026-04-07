@@ -17,6 +17,7 @@ export default function LandlordPage() {
         const res = await fetch(`/api/landlords/${params.slug}`);
         const data = await res.json();
         if (data.landlord) {
+          data.landlord.reviews = data.reviews || [];
           setLandlord(data.landlord);
         }
       } catch (err) {
