@@ -2,25 +2,24 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Send } from "lucide-react";
-import StarRating from "@/components/StarRating";
-import RedFlagTags from "@/components/RedFlagTags";
-import { CITIES, RATING_LABELS } from "@/types";
+import { CITIES } from "@/types";
 import type { RatingAxes, RedFlagId } from "@/types";
 
-const STEPS = ["Property Details", "Assessments", "Violations", "Verification"];
+const RED_FLAGS: { id: RedFlagId; label: string }[] = [
+  { id: "unannounced_visits", label: "Unannounced Visits" },
+  { id: "deposit_withheld", label: "Deposit Disputes" },
+  { id: "refused_repairs", label: "Late Repairs" },
+  { id: "harassment", label: "Harassment" },
+  { id: "fake_deductions", label: "Fake Deductions" },
+];
 
 export default function SubmitPage() {
   const router = useRouter();
-  const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  // Form data
   const [landlordName, setLandlordName] = useState("");
   const [city, setCity] = useState("");
-  const [pincode, setPincode] = useState("");
-  const [tenancyPeriod, setTenancyPeriod] = useState("");
   const [ratings, setRatings] = useState<RatingAxes>({
     deposit_return: 0,
     maintenance: 0,
@@ -30,13 +29,21 @@ export default function SubmitPage() {
   const [redFlags, setRedFlags] = useState<RedFlagId[]>([]);
   const [text, setText] = useState("");
 
-  const canProceed = () => {
-    if (step === 0) return landlordName.trim() && city;
-    if (step === 1) return Object.values(ratings).every((v) => v > 0);
-    return true;
+  const handleRatingChange = (key: keyof RatingAxes, val: number) => {
+    setRatings(prev => ({ ...prev, [key]: val }));
   };
 
-  const handleSubmit = async () => {
+  const toggleRedFlag = (id: RedFlagId) => {
+    setRedFlags(prev => prev.includes(id) ? prev.filter((flag) => flag !== id) : [...prev, id]);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!landlordName || !city || Object.values(ratings).some(r => r === 0)) {
+        setError("Please fill out landlord name, city, and provide all 4 ratings.");
+        return;
+    }
+
     setSubmitting(true);
     setError("");
     try {
@@ -46,8 +53,8 @@ export default function SubmitPage() {
         body: JSON.stringify({
           landlord_name: landlordName,
           city,
-          pincode,
-          tenancy_period: tenancyPeriod,
+          pincode: "",
+          tenancy_period: "",
           ratings,
           red_flags: redFlags,
           text,
@@ -69,204 +76,132 @@ export default function SubmitPage() {
     }
   };
 
-  return (
-    <div className="max-w-2xl mx-auto px-6 py-12 sm:py-20">
-      <div className="mb-12">
-        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4" style={{ color: "var(--text)" }}>Submit Report</h1>
-        <p className="text-lg font-medium" style={{ color: "var(--text-secondary)" }}>
-          Your identity is protected. Your experience becomes public record.
-        </p>
-      </div>
-
-      {/* Progress */}
-      <div className="mb-12 pb-6 border-b" style={{ borderColor: "var(--border)" }}>
-        <p className="text-xs font-bold uppercase tracking-widest accent-number mb-2">Step 0{step + 1} / 0{STEPS.length}</p>
-        <h2 className="text-2xl font-bold" style={{ color: "var(--text)" }}>{STEPS[step]}</h2>
-      </div>
-
-      {/* Step Content */}
-      <div className="min-h-[300px]">
-        {/* Step 0: Landlord Info */}
-        {step === 0 && (
-          <div className="space-y-8">
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "var(--text-secondary)" }}>
-                Landlord Full Name <span style={{ color: "var(--danger)" }}>*</span>
-              </label>
-              <input
-                type="text"
-                value={landlordName}
-                onChange={(e) => setLandlordName(e.target.value)}
-                placeholder="e.g. Rakesh Sharma"
-                className="w-full px-4 border font-medium outline-none transition-colors"
-                style={{ height: "56px", background: "var(--card)", borderColor: "var(--border)", color: "var(--text)", borderRadius: "4px" }}
-                onFocus={(e) => e.target.style.borderColor = "var(--text)"}
-                onBlur={(e) => e.target.style.borderColor = "var(--border)"}
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "var(--text-secondary)" }}>
-                City <span style={{ color: "var(--danger)" }}>*</span>
-              </label>
-              <select
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                className="w-full px-4 border font-medium outline-none transition-colors cursor-pointer"
-                style={{ height: "56px", background: "var(--card)", borderColor: "var(--border)", color: "var(--text)", borderRadius: "4px" }}
-                onFocus={(e) => e.target.style.borderColor = "var(--text)"}
-                onBlur={(e) => e.target.style.borderColor = "var(--border)"}
-              >
-                <option value="">Select city</option>
-                {CITIES.map((c) => (
-                  <option key={c} value={c}>{c}</option>
+  const renderStars = (key: keyof RatingAxes, label: string) => {
+    return (
+        <div className="flex items-center justify-between">
+            <span className="font-medium text-on-surface">{label}</span>
+            <div className="flex gap-1 text-primary">
+                {[1, 2, 3, 4, 5].map((star) => (
+                    <span 
+                        key={star} 
+                        onClick={() => handleRatingChange(key, star)}
+                        className={`material-symbols-outlined cursor-pointer hover:scale-110 transition-transform ${ratings[key] >= star ? 'star-filled' : ''}`}
+                    >
+                        star
+                    </span>
                 ))}
-              </select>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "var(--text-secondary)" }}>
-                  Pincode <span style={{ opacity: 0.5 }}>(optional)</span>
-                </label>
-                <input
-                  type="text"
-                  value={pincode}
-                  onChange={(e) => setPincode(e.target.value)}
-                  placeholder="e.g. 110092"
-                  maxLength={6}
-                  className="w-full px-4 border font-medium outline-none transition-colors"
-                  style={{ height: "56px", background: "var(--card)", borderColor: "var(--border)", color: "var(--text)", borderRadius: "4px" }}
-                  onFocus={(e) => e.target.style.borderColor = "var(--text)"}
-                  onBlur={(e) => e.target.style.borderColor = "var(--border)"}
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "var(--text-secondary)" }}>
-                  Tenancy Period <span style={{ opacity: 0.5 }}>(optional)</span>
-                </label>
-                <input
-                  type="text"
-                  value={tenancyPeriod}
-                  onChange={(e) => setTenancyPeriod(e.target.value)}
-                  placeholder="e.g. 2022-2024"
-                  className="w-full px-4 border font-medium outline-none transition-colors"
-                  style={{ height: "56px", background: "var(--card)", borderColor: "var(--border)", color: "var(--text)", borderRadius: "4px" }}
-                  onFocus={(e) => e.target.style.borderColor = "var(--text)"}
-                  onBlur={(e) => e.target.style.borderColor = "var(--border)"}
-                />
-              </div>
-            </div>
-          </div>
-        )}
+        </div>
+    )
+  }
 
-        {/* Step 1: Ratings */}
-        {step === 1 && (
-          <div className="space-y-6">
-            <p className="font-medium mb-8" style={{ color: "var(--text-secondary)" }}>
-              Rate the landlord strictly on facts. A rating of 1 implies extreme negligence.
-            </p>
-            {(Object.keys(ratings) as (keyof RatingAxes)[]).map((key) => (
-              <div key={key} className="flex flex-col sm:flex-row sm:items-center justify-between p-6 border bg-white" style={{ borderColor: "var(--border)", borderRadius: "4px" }}>
-                <span className="font-bold mb-4 sm:mb-0" style={{ color: "var(--text)" }}>{RATING_LABELS[key]}</span>
-                <StarRating value={ratings[key]} onChange={(val) => setRatings({ ...ratings, [key]: val })} size="lg" />
-              </div>
-            ))}
-          </div>
-        )}
+  return (
+    <div className="px-6 max-w-[800px] mx-auto">
+        {/* Header Section */}
+        <header className="mb-12 text-center">
+            <h1 className="font-headline font-bold text-5xl text-on-surface tracking-tighter mb-4">Share Your Experience</h1>
+            <p className="text-on-surface-variant text-lg max-w-md mx-auto">Help the community by providing an honest, anonymous review of your recent tenancy.</p>
+        </header>
 
-        {/* Step 2: Red Flags */}
-        {step === 2 && (
-          <div className="space-y-6">
-            <p className="font-medium mb-8" style={{ color: "var(--text-secondary)" }}>
-              Select all major violations committed by this landlord. These are serious allegations.
-            </p>
-            <RedFlagTags selected={redFlags} onChange={setRedFlags} />
-          </div>
-        )}
-
-        {/* Step 3: Text Review + Submit */}
-        {step === 3 && (
-          <div className="space-y-8">
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "var(--text-secondary)" }}>
-                Written Testimony <span style={{ opacity: 0.5 }}>(highly recommended)</span>
-              </label>
-              <textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="Detail your experience objectively. Stick to the facts."
-                rows={6}
-                className="w-full p-4 border font-medium outline-none transition-colors resize-none"
-                style={{ background: "var(--card)", borderColor: "var(--border)", color: "var(--text)", borderRadius: "4px", lineHeight: "1.6" }}
-                onFocus={(e) => e.target.style.borderColor = "var(--text)"}
-                onBlur={(e) => e.target.style.borderColor = "var(--border)"}
-              />
-            </div>
-
-            <div className="p-6 border bg-white" style={{ borderColor: "var(--border)", borderRadius: "4px" }}>
-              <h4 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: "var(--text)", borderBottom: "1px solid var(--border)", paddingBottom: "12px" }}>Submission Record</h4>
-              <div className="text-sm font-medium space-y-3" style={{ color: "var(--text-secondary)" }}>
-                <div className="flex justify-between">
-                  <span>Subject:</span>
-                  <span className="font-bold" style={{ color: "var(--text)" }}>{landlordName}</span>
+        {/* Review Form Card */}
+        <section className="bg-surface-container-lowest rounded-xl p-6 sm:p-10 shadow-[0px_24px_48px_-12px_rgba(19,27,46,0.08)]">
+            <form className="space-y-10" onSubmit={handleSubmit}>
+                {/* Basic Info */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                        <label className="block text-sm font-semibold font-headline text-on-surface-variant uppercase tracking-wider">Landlord or Agency Name *</label>
+                        <input 
+                            className="w-full h-14 px-4 bg-surface-container-low outline-none rounded-lg focus:ring-2 focus:ring-primary/30 focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-outline/50" 
+                            placeholder="e.g. Skyline Properties Ltd." 
+                            type="text" 
+                            value={landlordName}
+                            onChange={(e) => setLandlordName(e.target.value)}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="block text-sm font-semibold font-headline text-on-surface-variant uppercase tracking-wider">City *</label>
+                        <select 
+                            className="w-full h-14 px-4 bg-surface-container-low outline-none rounded-lg focus:ring-2 focus:ring-primary/30 focus:bg-surface-container-lowest transition-all text-on-surface"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                        >
+                            <option value="">Select a city</option>
+                            {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                    </div>
                 </div>
-                <div className="flex justify-between">
-                  <span>Location:</span>
-                  <span className="font-bold" style={{ color: "var(--text)" }}>{city} {pincode && `(${pincode})`}</span>
+
+                {/* Ratings Grid */}
+                <div className="pt-4 border-t border-outline-variant/20">
+                    <h3 className="font-headline font-bold text-xl mb-6">Performance Metrics *</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+                        {renderStars("deposit_return", "Security Deposit Return")}
+                        {renderStars("maintenance", "Maintenance Speed")}
+                        {renderStars("behaviour", "Professionalism")}
+                        {renderStars("rent_fairness", "Value for Money")}
+                    </div>
                 </div>
-                <div className="flex justify-between">
-                  <span>Aggregate Score:</span>
-                  <span className="font-black accent-number">{(Object.values(ratings).reduce((a, b) => a + b, 0) / 4).toFixed(1)} / 5.0</span>
+
+                {/* Red Flag Tags */}
+                <div className="pt-4 space-y-4">
+                    <label className="block text-sm font-semibold font-headline text-on-surface-variant uppercase tracking-wider">Any Red Flags? (Select all that apply)</label>
+                    <div className="flex flex-wrap gap-3">
+                        {RED_FLAGS.map(flag => (
+                            <button 
+                                key={flag.id}
+                                className={`px-5 py-2 rounded-full border transition-all font-medium text-sm ${redFlags.includes(flag.id) ? 'bg-error-container text-on-error-container border-transparent' : 'border-outline-variant/30 text-on-surface-variant hover:bg-error-container hover:text-on-error-container hover:border-transparent'}`} 
+                                type="button"
+                                onClick={() => toggleRedFlag(flag.id)}
+                            >
+                                {flag.label}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-                {redFlags.length > 0 && (
-                  <div className="flex justify-between">
-                    <span>Violations logged:</span>
-                    <span className="font-bold" style={{ color: "var(--danger)" }}>{redFlags.length} flags</span>
-                  </div>
+
+                {/* Comment Box */}
+                <div className="pt-4 space-y-2">
+                    <label className="block text-sm font-semibold font-headline text-on-surface-variant uppercase tracking-wider">Your Experience</label>
+                    <textarea 
+                        className="w-full p-4 bg-surface-container-low outline-none rounded-lg focus:ring-2 focus:ring-primary/30 focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-outline/50 resize-none" 
+                        placeholder="Tell other renters what it's really like to live here..." 
+                        rows={5}
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                    ></textarea>
+                    <p className="text-xs text-outline italic">Keep it professional and factual. Avoid personal details.</p>
+                </div>
+
+                {error && (
+                    <div className="p-4 bg-error-container border border-error text-on-error-container font-bold text-sm rounded">
+                        {error}
+                    </div>
                 )}
-              </div>
-            </div>
 
-            {error && (
-              <div className="p-4 bg-red-50 border border-red-200 text-red-700 font-bold text-sm">
-                {error}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+                {/* Submit Button */}
+                <div className="pt-6">
+                    <button 
+                        disabled={submitting}
+                        className="w-full h-16 bg-gradient-to-r from-primary to-primary-container text-white font-headline font-bold text-lg rounded-xl shadow-lg hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:scale-100 transition-all flex items-center justify-center gap-2 group" 
+                        type="submit"
+                    >
+                        {submitting ? "Publishing..." : "Publish Review"}
+                        {!submitting && <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>}
+                    </button>
+                </div>
+            </form>
+        </section>
 
-      {/* Navigation */}
-      <div className="flex flex-col-reverse sm:flex-row items-center justify-between mt-12 gap-4 border-t pt-8" style={{ borderColor: "var(--border)" }}>
-        <button
-          onClick={() => setStep(step - 1)}
-          disabled={step === 0}
-          className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 font-bold transition-opacity disabled:opacity-0"
-          style={{ color: "var(--text-secondary)" }}
-        >
-          <ArrowLeft className="w-4 h-4" /> Go Back
-        </button>
+        {/* Bottom Tip */}
+        <div className="mt-8 flex items-center justify-center gap-2 text-on-surface-variant">
+            <span className="material-symbols-outlined text-tertiary">verified_user</span>
+            <span className="text-sm">Your review is encrypted and stays 100% anonymous.</span>
+        </div>
 
-        {step < STEPS.length - 1 ? (
-          <button
-            onClick={() => setStep(step + 1)}
-            disabled={!canProceed()}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-10 py-4 font-bold transition-all disabled:opacity-50"
-            style={{ background: "var(--text)", color: "var(--card)", borderRadius: "4px" }}
-          >
-            Continue <ArrowRight className="w-4 h-4" />
-          </button>
-        ) : (
-          <button
-            onClick={handleSubmit}
-            disabled={submitting}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-10 py-4 font-bold transition-all disabled:opacity-50"
-            style={{ background: "var(--accent)", color: "white", borderRadius: "4px" }}
-          >
-            {submitting ? "Processing..." : "Publish Report"}
-            {!submitting && <Send className="w-4 h-4" />}
-          </button>
-        )}
-      </div>
+        {/* Decorative Elements */}
+        {/* We add fixed elements via globals style or simply inline divs that won't disrupt scroll */}
+        <div className="fixed top-1/4 -left-20 w-96 h-96 bg-primary/5 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+        <div className="fixed bottom-1/4 -right-20 w-96 h-96 bg-secondary/5 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
     </div>
   );
 }

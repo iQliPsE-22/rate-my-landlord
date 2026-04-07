@@ -18,13 +18,17 @@ export async function GET(req: NextRequest) {
     // Build query
     const query: Record<string, unknown> = {};
 
+    function escapeRegex(text: string) {
+      return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    }
+
     if (q) {
       // Case-insensitive regex search on name
-      query.name = { $regex: q, $options: "i" };
+      query.name = { $regex: escapeRegex(q), $options: "i" };
     }
 
     if (city && city !== "All Cities") {
-      query.city = { $regex: city, $options: "i" };
+      query.city = { $regex: escapeRegex(city), $options: "i" };
     }
 
     if (pincode) {

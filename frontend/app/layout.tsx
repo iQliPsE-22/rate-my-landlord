@@ -1,19 +1,23 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Inter, Manrope } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+});
+
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Rate My Landlord India — Know Your Landlord Before You Sign",
+  title: "RentersGuard | Search & Results",
   description:
-    "Anonymous landlord reviews for Indian tenants. Search landlord ratings, submit reviews, and protect the next tenant. Glassdoor for landlords.",
-  keywords: "landlord review, tenant review india, rate landlord, landlord rating, rental review india",
+    "Anonymous landlord reviews and transparency in housing. Search landlord ratings, submit reviews, and protect the next tenant.",
 };
 
 export default function RootLayout({
@@ -22,58 +26,45 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} h-full`}>
-      <body className="min-h-full flex flex-col" style={{ background: "var(--bg)" }}>
-        {/* Navbar */}
-        <nav className="sticky top-0 z-50 border-b" style={{ borderColor: "var(--border)", background: "rgba(250,250,249,0.92)", backdropFilter: "blur(12px)" }}>
-          <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-3 group">
-              <span className="text-2xl">🏠</span>
-              <span className="font-bold text-lg tracking-tight" style={{ color: "var(--text)" }}>
-                RateMyLandlord
-              </span>
-              <span className="px-2 py-0.5 rounded text-xs font-bold tracking-wider uppercase" style={{ background: "var(--accent-surface)", color: "var(--accent)", border: "1px solid #FDBA74" }}>
-                India
-              </span>
-            </Link>
-            <div className="flex items-center gap-2">
-              <Link
-                href="/search?q="
-                className="text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-200 hover:bg-stone-100"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                Search
-              </Link>
-              <Link
-                href="/submit"
-                className="text-sm font-bold px-5 py-2.5 rounded-lg text-white transition-all duration-200 hover:bg-[#9A3412]"
-                style={{ background: "var(--accent)" }}
-              >
-                Write a Review
-              </Link>
+    <html lang="en" className={cn("light", inter.variable, manrope.variable)}>
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+      </head>
+      <body className="min-h-full flex flex-col bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+        
+        {/* Top Navigation Shell */}
+        <nav className="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-3xl shadow-[0px_24px_48px_-12px_rgba(19,27,46,0.08)]">
+          <div className="flex justify-between items-center px-6 md:px-12 h-20 max-w-[1440px] mx-auto">
+            <Link href="/" className="text-2xl font-bold tracking-tighter text-indigo-900 dark:text-indigo-100 font-headline">RentersGuard</Link>
+            <div className="hidden md:flex gap-8 items-center font-headline font-semibold tracking-tight">
+              <Link href="/search?q=" className="text-slate-600 dark:text-slate-400 hover:text-indigo-900 transition-colors duration-300">Browse Properties</Link>
+              <Link href="/search?q=" className="text-slate-600 dark:text-slate-400 hover:text-indigo-900 transition-colors duration-300">Landlord Directory</Link>
+              <Link href="/submit" className="text-indigo-700 dark:text-indigo-300 border-b-2 border-indigo-700 pb-1">Write a Review</Link>
+            </div>
+            <div className="flex items-center gap-6">
+              <div className="hidden lg:block relative group">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+                <input className="bg-surface-container-low border-none rounded-xl pl-10 pr-4 py-2 w-64 focus:ring-2 focus:ring-primary/30 transition-all font-body text-sm" placeholder="Search landlords..." type="text" />
+              </div>
+              <button className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-xl font-headline font-semibold text-sm scale-100 active:scale-95 transition-all duration-150">Sign In</button>
             </div>
           </div>
         </nav>
 
         {/* Main content */}
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 w-full pt-32 pb-24">{children}</main>
 
-        {/* Footer — minimal, editorial */}
-        <footer className="border-t" style={{ borderColor: "var(--border)", background: "var(--card)" }}>
-          <div className="max-w-5xl mx-auto px-6 py-10">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div>
-                <p className="text-sm font-bold" style={{ color: "var(--text)" }}>Rate My Landlord India</p>
-                <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>Built for tenants, by tenants. © 2026</p>
-              </div>
-              <div className="flex items-center gap-6 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>
-                <Link href="/submit" className="transition-colors duration-200 hover:text-stone-900">
-                  Submit Review
-                </Link>
-                <Link href="/search?q=" className="transition-colors duration-200 hover:text-stone-900">
-                  Search
-                </Link>
-              </div>
+        {/* Footer Shell */}
+        <footer className="bg-slate-50 dark:bg-slate-950 w-full py-12 mt-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center px-12 max-w-[1440px] mx-auto">
+            <div className="font-headline font-bold text-slate-900 dark:text-slate-100 mb-6 md:mb-0 text-xl">RentersGuard</div>
+            <div className="flex flex-wrap justify-center gap-8 text-sm font-['Inter'] tracking-wide">
+              <Link className="text-slate-500 dark:text-slate-400 hover:underline hover:text-indigo-700 transition-all" href="#">Terms of Service</Link>
+              <Link className="text-slate-500 dark:text-slate-400 hover:underline hover:text-indigo-700 transition-all" href="#">Privacy Policy</Link>
+              <Link className="text-slate-500 dark:text-slate-400 hover:underline hover:text-indigo-700 transition-all" href="#">Landlord Guidelines</Link>
+            </div>
+            <div className="mt-8 md:mt-0 text-slate-500 dark:text-slate-400 text-xs">
+                © 2026 RentersGuard. Transparency in Housing.
             </div>
           </div>
         </footer>

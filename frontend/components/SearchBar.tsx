@@ -2,6 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CITIES } from "@/types";
 
 interface SearchBarProps {
   defaultQuery?: string;
@@ -11,7 +15,7 @@ interface SearchBarProps {
 
 export default function SearchBar({ defaultQuery = "", defaultCity = "", compact = false }: SearchBarProps) {
   const [query, setQuery] = useState(defaultQuery);
-  const [city, setCity] = useState(defaultCity);
+  const [city, setCity] = useState(defaultCity || "all");
   const router = useRouter();
 
   const handleSearch = (e: React.FormEvent) => {
@@ -20,77 +24,46 @@ export default function SearchBar({ defaultQuery = "", defaultCity = "", compact
 
     const params = new URLSearchParams();
     params.set("q", query.trim());
-    if (city) params.set("city", city);
+    if (city && city !== "all") params.set("city", city);
     router.push(`/search?${params.toString()}`);
   };
 
   return (
     <form onSubmit={handleSearch} className="w-full">
       <div className={`
-        flex flex-col sm:flex-row gap-0 sm:gap-4
-        ${compact ? "" : "p-1.5 border"}
-      `}
-      style={!compact ? { background: "var(--card)", borderColor: "var(--border)", borderRadius: "6px" } : {}}>
+        flex flex-col sm:flex-row gap-3 sm:gap-0
+        ${compact ? "" : "p-1.5 bg-[var(--card)] border border-[var(--border)] rounded-md shadow-sm"}
+      `}>
         
-        <div className="flex-1">
-          <input
-            type="text"
+        <div className="flex-1 relative">
+          <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search landlord by name..."
-            className={`w-full outline-none font-medium ${compact ? "border px-4" : "px-4"}`}
-            style={{ 
-              background: "transparent", 
-              color: "var(--text)", 
-              height: compact ? "48px" : "56px",
-              ...(compact ? { borderColor: "var(--border)", borderRadius: "4px" } : {})
-            }}
+            className={`w-full font-medium ${compact ? "h-12" : "border-0 shadow-none focus-visible:ring-0 h-[56px] text-base bg-transparent px-4"}`}
           />
         </div>
         
-        <div className={`sm:w-48 ${!compact && "border-l"}`} style={{ borderColor: "var(--border)" }}>
-          <select
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            className={`w-full outline-none font-medium cursor-pointer ${compact ? "border px-3 mt-3 sm:mt-0" : "px-4"}`}
-            style={{ 
-              background: "transparent", 
-              color: "var(--text)",
-              height: compact ? "48px" : "56px",
-              ...(compact ? { borderColor: "var(--border)", borderRadius: "4px" } : {})
-            }}
-          >
-            <option value="">All Cities</option>
-            <option value="Delhi NCR">Delhi NCR</option>
-            <option value="Bengaluru">Bengaluru</option>
-            <option value="Mumbai">Mumbai</option>
-            <option value="Pune">Pune</option>
-            <option value="Hyderabad">Hyderabad</option>
-            <option value="Chennai">Chennai</option>
-            <option value="Kolkata">Kolkata</option>
-            <option value="Ahmedabad">Ahmedabad</option>
-            <option value="Jaipur">Jaipur</option>
-            <option value="Chandigarh">Chandigarh</option>
-            <option value="Lucknow">Lucknow</option>
-            <option value="Indore">Indore</option>
-            <option value="Kochi">Kochi</option>
-            <option value="Goa">Goa</option>
-          </select>
+        <div className={`sm:w-48 ${!compact && "border-t sm:border-t-0 sm:border-l border-[var(--border)]"}`}>
+          <Select value={city} onValueChange={setCity}>
+            <SelectTrigger className={`w-full font-medium cursor-pointer ${compact ? "h-12" : "border-0 shadow-none focus:ring-0 h-[56px] text-base bg-transparent px-4"}`}>
+              <SelectValue placeholder="All Cities" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Cities</SelectItem>
+              {CITIES.map((c) => (
+                <SelectItem key={c} value={c}>{c}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
-        <button
+        <Button
           type="submit"
-          className={`font-bold transition-opacity hover:opacity-90 ${compact && "mt-3 sm:mt-0"}`}
-          style={{ 
-            background: "var(--text)", 
-            color: "var(--card)",
-            height: compact ? "48px" : "56px",
-            padding: "0 32px",
-            borderRadius: compact ? "4px" : "4px"
-          }}
+          className={`font-bold transition-opacity hover:opacity-90 ${compact ? "w-full sm:w-auto h-12" : "w-full sm:w-auto h-[56px] px-8 text-base bg-[var(--text)] text-[var(--card)] rounded-md ml-0 sm:ml-2"}`}
         >
           Search
-        </button>
+        </Button>
       </div>
     </form>
   );
