@@ -2,16 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CITIES } from "@/types";
+import { CITIES, RED_FLAGS } from "@/types";
 import type { RatingAxes, RedFlagId } from "@/types";
 
-const RED_FLAGS: { id: RedFlagId; label: string }[] = [
-  { id: "unannounced_visits", label: "Unannounced Visits" },
-  { id: "deposit_withheld", label: "Deposit Disputes" },
-  { id: "refused_repairs", label: "Late Repairs" },
-  { id: "harassment", label: "Harassment" },
-  { id: "fake_deductions", label: "Fake Deductions" },
-];
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function SubmitPage() {
   const router = useRouter();
@@ -79,13 +77,13 @@ export default function SubmitPage() {
   const renderStars = (key: keyof RatingAxes, label: string) => {
     return (
         <div className="flex items-center justify-between">
-            <span className="font-medium text-on-surface">{label}</span>
-            <div className="flex gap-1 text-primary">
+            <span className="font-bold text-[#4a5568]">{label}</span>
+            <div className="flex gap-1 text-[#abc4ff]">
                 {[1, 2, 3, 4, 5].map((star) => (
                     <span 
                         key={star} 
                         onClick={() => handleRatingChange(key, star)}
-                        className={`material-symbols-outlined cursor-pointer hover:scale-110 transition-transform ${ratings[key] >= star ? 'star-filled' : ''}`}
+                        className={`material-symbols-outlined cursor-pointer hover:scale-110 transition-transform ${ratings[key] >= star ? 'star-filled' : 'opacity-40'}`}
                     >
                         star
                     </span>
@@ -96,112 +94,117 @@ export default function SubmitPage() {
   }
 
   return (
-    <div className="px-6 max-w-[800px] mx-auto">
+    <div className="px-6 max-w-[800px] mx-auto pt-8 pb-16">
         {/* Header Section */}
         <header className="mb-12 text-center">
-            <h1 className="font-headline font-bold text-5xl text-on-surface tracking-tighter mb-4">Share Your Experience</h1>
-            <p className="text-on-surface-variant text-lg max-w-md mx-auto">Help the community by providing an honest, anonymous review of your recent tenancy.</p>
+            <h1 className="font-headline font-bold text-5xl text-[#2d3748] tracking-tighter mb-4">Share Your Experience</h1>
+            <p className="text-[#4a5568] text-lg max-w-md mx-auto">Help the community by providing an honest, anonymous review of your recent tenancy.</p>
         </header>
 
         {/* Review Form Card */}
-        <section className="bg-surface-container-lowest rounded-xl p-6 sm:p-10 shadow-[0px_24px_48px_-12px_rgba(19,27,46,0.08)]">
-            <form className="space-y-10" onSubmit={handleSubmit}>
-                {/* Basic Info */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-2">
-                        <label className="block text-sm font-semibold font-headline text-on-surface-variant uppercase tracking-wider">Landlord or Agency Name *</label>
-                        <input 
-                            className="w-full h-14 px-4 bg-surface-container-low outline-none rounded-lg focus:ring-2 focus:ring-primary/30 focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-outline/50" 
-                            placeholder="e.g. Skyline Properties Ltd." 
-                            type="text" 
-                            value={landlordName}
-                            onChange={(e) => setLandlordName(e.target.value)}
+        <Card className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-[2rem] shadow-[0_8px_32px_rgba(31,56,100,0.06)] overflow-hidden">
+            <CardContent className="p-6 sm:p-10">
+                <form className="space-y-10" onSubmit={handleSubmit}>
+                    {/* Basic Info */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                        <div className="space-y-3 w-full">
+                            <label className="block text-sm font-semibold font-headline text-[#4a5568] uppercase tracking-wider">Landlord or Agency Name *</label>
+                            <Input 
+                                className="w-full h-14 px-4 bg-white/70 border-white/50 rounded-xl focus-visible:ring-[#abc4ff]/50 focus-visible:bg-white transition-all text-[#2d3748] shadow-sm placeholder:text-slate-400 text-base" 
+                                placeholder="e.g. Skyline Properties Ltd." 
+                                type="text" 
+                                value={landlordName}
+                                onChange={(e) => setLandlordName(e.target.value)}
+                            />
+                        </div>
+                        <div className="space-y-3 w-full">
+                            <label className="block text-sm font-semibold font-headline text-[#4a5568] uppercase tracking-wider">City *</label>
+                            <Select value={city} onValueChange={(val) => setCity(val || "")}>
+                                <SelectTrigger className="w-full h-14 px-4 bg-white/70 border-white/50 rounded-xl focus:ring-[#abc4ff]/50 focus:bg-white transition-all text-[#2d3748] shadow-sm text-base">
+                                    <SelectValue placeholder="Select a city" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-white/90 backdrop-blur-md border border-white/50 rounded-xl shadow-lg">
+                                    {CITIES.map(c => (
+                                        <SelectItem key={c} value={c} className="rounded-lg py-3 hover:bg-[#edf2fb] focus:bg-[#edf2fb] cursor-pointer">
+                                            {c}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+
+                    {/* Ratings Grid */}
+                    <div className="pt-4 border-t border-white/50">
+                        <h3 className="font-headline font-bold text-xl mb-6 text-[#2d3748]">Performance Metrics *</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+                            {renderStars("deposit_return", "Security Deposit Return")}
+                            {renderStars("maintenance", "Maintenance Speed")}
+                            {renderStars("behaviour", "Professionalism")}
+                            {renderStars("rent_fairness", "Value for Money")}
+                        </div>
+                    </div>
+
+                    {/* Red Flag Tags */}
+                    <div className="pt-4 space-y-4">
+                        <label className="block text-sm font-semibold font-headline text-[#4a5568] uppercase tracking-wider">Any Red Flags? (Select all that apply)</label>
+                        <div className="flex flex-wrap gap-3">
+                            {RED_FLAGS.map(flag => (
+                                <Button 
+                                    key={flag.id}
+                                    type="button"
+                                    variant="ghost"
+                                    className={`px-5 py-6 rounded-xl transition-all font-bold text-sm shadow-sm ${redFlags.includes(flag.id) ? 'bg-rose-50 text-rose-500 border border-rose-200 hover:bg-rose-100 hover:text-rose-600' : 'bg-white/60 border border-white/50 text-[#4a5568] hover:bg-rose-50 hover:text-rose-500 hover:border-rose-100'}`} 
+                                    onClick={() => toggleRedFlag(flag.id)}
+                                >
+                                    {flag.label}
+                                </Button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Comment Box */}
+                    <div className="pt-4 space-y-3 border-t border-white/50 pt-8 mt-4">
+                        <label className="block text-sm font-semibold font-headline text-[#4a5568] uppercase tracking-wider">Your Experience</label>
+                        <Textarea 
+                            className="w-full p-4 bg-white/70 border-white/50 rounded-2xl focus-visible:ring-[#abc4ff]/50 focus-visible:bg-white transition-all text-[#2d3748] shadow-sm placeholder:text-slate-400 resize-none min-h-[140px] text-base" 
+                            placeholder="Tell other renters what it's really like to live here..." 
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
                         />
+                        <p className="text-xs text-slate-400 font-medium">Keep it professional and factual. Avoid personal details.</p>
                     </div>
-                    <div className="space-y-2">
-                        <label className="block text-sm font-semibold font-headline text-on-surface-variant uppercase tracking-wider">City *</label>
-                        <select 
-                            className="w-full h-14 px-4 bg-surface-container-low outline-none rounded-lg focus:ring-2 focus:ring-primary/30 focus:bg-surface-container-lowest transition-all text-on-surface"
-                            value={city}
-                            onChange={(e) => setCity(e.target.value)}
+
+                    {error && (
+                        <div className="p-4 bg-rose-50 border border-rose-200 text-rose-600 font-bold text-sm rounded-xl">
+                            {error}
+                        </div>
+                    )}
+
+                    {/* Submit Button */}
+                    <div className="pt-6">
+                        <Button 
+                            disabled={submitting}
+                            type="submit"
+                            className="w-full h-16 bg-[#abc4ff] text-white font-headline font-bold text-lg rounded-2xl shadow-[0_4px_12px_rgba(171,196,255,0.4)] hover:shadow-[0_8px_24px_rgba(171,196,255,0.6)] hover:bg-[#b6ccfe] transition-all flex items-center justify-center gap-2 group" 
                         >
-                            <option value="">Select a city</option>
-                            {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
-                        </select>
+                            {submitting ? "Publishing..." : "Publish Review"}
+                            {!submitting && <span className="text-xl rotate-0 group-hover:translate-x-1 transition-transform">→</span>}
+                        </Button>
                     </div>
-                </div>
-
-                {/* Ratings Grid */}
-                <div className="pt-4 border-t border-outline-variant/20">
-                    <h3 className="font-headline font-bold text-xl mb-6">Performance Metrics *</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
-                        {renderStars("deposit_return", "Security Deposit Return")}
-                        {renderStars("maintenance", "Maintenance Speed")}
-                        {renderStars("behaviour", "Professionalism")}
-                        {renderStars("rent_fairness", "Value for Money")}
-                    </div>
-                </div>
-
-                {/* Red Flag Tags */}
-                <div className="pt-4 space-y-4">
-                    <label className="block text-sm font-semibold font-headline text-on-surface-variant uppercase tracking-wider">Any Red Flags? (Select all that apply)</label>
-                    <div className="flex flex-wrap gap-3">
-                        {RED_FLAGS.map(flag => (
-                            <button 
-                                key={flag.id}
-                                className={`px-5 py-2 rounded-full border transition-all font-medium text-sm ${redFlags.includes(flag.id) ? 'bg-error-container text-on-error-container border-transparent' : 'border-outline-variant/30 text-on-surface-variant hover:bg-error-container hover:text-on-error-container hover:border-transparent'}`} 
-                                type="button"
-                                onClick={() => toggleRedFlag(flag.id)}
-                            >
-                                {flag.label}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Comment Box */}
-                <div className="pt-4 space-y-2">
-                    <label className="block text-sm font-semibold font-headline text-on-surface-variant uppercase tracking-wider">Your Experience</label>
-                    <textarea 
-                        className="w-full p-4 bg-surface-container-low outline-none rounded-lg focus:ring-2 focus:ring-primary/30 focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-outline/50 resize-none" 
-                        placeholder="Tell other renters what it's really like to live here..." 
-                        rows={5}
-                        value={text}
-                        onChange={(e) => setText(e.target.value)}
-                    ></textarea>
-                    <p className="text-xs text-outline italic">Keep it professional and factual. Avoid personal details.</p>
-                </div>
-
-                {error && (
-                    <div className="p-4 bg-error-container border border-error text-on-error-container font-bold text-sm rounded">
-                        {error}
-                    </div>
-                )}
-
-                {/* Submit Button */}
-                <div className="pt-6">
-                    <button 
-                        disabled={submitting}
-                        className="w-full h-16 bg-gradient-to-r from-primary to-primary-container text-white font-headline font-bold text-lg rounded-xl shadow-lg hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:scale-100 transition-all flex items-center justify-center gap-2 group" 
-                        type="submit"
-                    >
-                        {submitting ? "Publishing..." : "Publish Review"}
-                        {!submitting && <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>}
-                    </button>
-                </div>
-            </form>
-        </section>
+                </form>
+            </CardContent>
+        </Card>
 
         {/* Bottom Tip */}
-        <div className="mt-8 flex items-center justify-center gap-2 text-on-surface-variant">
-            <span className="material-symbols-outlined text-tertiary">verified_user</span>
-            <span className="text-sm">Your review is encrypted and stays 100% anonymous.</span>
+        <div className="mt-8 flex items-center justify-center gap-2 text-[#718096]">
+            <span className="text-[#abc4ff] font-bold">✓</span>
+            <span className="text-sm font-medium">Your review is encrypted and stays 100% anonymous.</span>
         </div>
 
         {/* Decorative Elements */}
-        {/* We add fixed elements via globals style or simply inline divs that won't disrupt scroll */}
-        <div className="fixed top-1/4 -left-20 w-96 h-96 bg-primary/5 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
-        <div className="fixed bottom-1/4 -right-20 w-96 h-96 bg-secondary/5 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+        <div className="fixed top-1/4 -left-20 w-96 h-96 bg-[#edf2fb] rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+        <div className="fixed bottom-1/4 -right-20 w-96 h-96 bg-[#e2eafc] rounded-full blur-[100px] -z-10 pointer-events-none"></div>
     </div>
   );
 }

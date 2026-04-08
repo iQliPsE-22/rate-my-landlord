@@ -17,22 +17,31 @@ export async function GET(req: NextRequest) {
 
     // Build query
     const query: Record<string, unknown> = {};
+    const $or: Record<string, unknown>[] = [];
 
     function escapeRegex(text: string) {
       return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
     }
 
     if (q) {
-      // Case-insensitive regex search on name
-      query.name = { $regex: escapeRegex(q), $options: "i" };
+      const regex = { $regex: escapeRegex(q), $options: "i" };
+      $or.push({ name: regex });
+      $or.push({ address: regex });
+      $or.push({ phone_number: regex });
+      $or.push({ city: regex });
     }
 
-    if (city && city !== "All Cities") {
+    if (city && city !== "All Cities" && city !== "all") {
+      // If a specific city is selected from the dropdown, it must match.
       query.city = { $regex: escapeRegex(city), $options: "i" };
     }
 
     if (pincode) {
       query.pincodes = pincode;
+    }
+
+    if ($or.length > 0) {
+      query.$or = $or;
     }
 
     const landlords = await Landlord.find(query)

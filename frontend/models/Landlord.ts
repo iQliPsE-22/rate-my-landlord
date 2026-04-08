@@ -4,6 +4,8 @@ export interface LandlordDocument extends Document {
   name: string;
   slug: string;
   city: string;
+  address?: string;
+  phone_number?: string;
   pincodes: string[];
   review_count: number;
   aggregate_score: {
@@ -30,6 +32,8 @@ const LandlordSchema = new Schema<LandlordDocument>(
     name: { type: String, required: true, index: true },
     slug: { type: String, required: true, unique: true, index: true },
     city: { type: String, required: true, index: true },
+    address: { type: String },
+    phone_number: { type: String },
     pincodes: [{ type: String, index: true }],
     review_count: { type: Number, default: 0 },
     aggregate_score: {
@@ -54,6 +58,6 @@ const LandlordSchema = new Schema<LandlordDocument>(
 );
 
 // Text index for search
-LandlordSchema.index({ name: "text", city: "text" });
+LandlordSchema.index({ name: "text", city: "text", address: "text", phone_number: "text" });
 
 export default mongoose.models.Landlord || mongoose.model<LandlordDocument>("Landlord", LandlordSchema);

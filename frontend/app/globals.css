@@ -1,67 +1,110 @@
 @import "tailwindcss";
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(calc(-50% - 1.5rem));
+  }
+}
+.marquee-group {
+  animation: marquee 20s linear infinite;
+}
+
+.glass-nav {
+  backdrop-filter: blur(24px) saturate(120%);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.03);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.04);
+}
+
+.bg-dot-pattern {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+}
+
+.glow-orb-1 {
+  background: radial-gradient(
+    circle,
+    rgba(171, 196, 255, 0.25) 0%,
+    rgba(171, 196, 255, 0) 70%
+  );
+}
+
+.glow-orb-2 {
+  background: radial-gradient(
+    circle,
+    rgba(204, 219, 253, 0.5) 0%,
+    rgba(204, 219, 253, 0) 70%
+  );
+}
+
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-on-secondary-fixed: #0d1c2e;
-  --color-inverse-surface: #283044;
-  --color-surface-tint: #0053db;
-  --color-on-primary-fixed: #00174b;
-  --color-on-secondary: #ffffff;
-  --color-primary-container: #004fd2;
-  --color-on-surface-variant: #454652;
-  --color-surface-container-high: #e2e7ff;
-  --color-surface: #faf8ff;
-  --color-surface-container-highest: #dae2fd;
-  --color-primary: #003aa0;
-  --color-on-tertiary-fixed: #00201d;
-  --color-on-tertiary-container: #78e4d6;
-  --color-secondary-fixed-dim: #b9c7df;
-  --color-on-error-container: #93000a;
-  --color-on-tertiary-fixed-variant: #005049;
-  --color-surface-bright: #faf8ff;
-  --color-secondary: #515f74;
-  --color-on-background: #131b2e;
-  --color-outline: #757684;
-  --color-on-secondary-container: #57657a;
-  --color-on-surface: #131b2e;
-  --color-on-primary: #ffffff;
-  --color-primary-fixed: #dbe1ff;
-  --color-on-secondary-fixed-variant: #3a485b;
-  --color-tertiary-fixed: #89f5e7;
-  --color-error: #ba1a1a;
-  --color-surface-container-lowest: #ffffff;
-  --color-inverse-on-surface: #eef0ff;
-  --color-tertiary-container: #00665d;
-  --color-surface-container: #eaedff;
-  --color-on-primary-fixed-variant: #003ea8;
-  --color-tertiary: #004c45;
-  --color-surface-dim: #d2d9f4;
-  --color-outline-variant: #c5c5d4;
-  --color-secondary-container: #d5e3fc;
-  --color-on-tertiary: #ffffff;
-  --color-surface-container-low: #f2f3ff;
-  --color-secondary-fixed: #d5e3fc;
-  --color-primary-fixed-dim: #b4c5ff;
-  --color-tertiary-fixed-dim: #6bd8cb;
-  --color-background: #faf8ff;
-  --color-on-error: #ffffff;
-  --color-surface-variant: #dae2fd;
-  --color-on-primary-container: #c4d1ff;
-  --color-error-container: #ffdad6;
-  --color-inverse-primary: #b4c5ff;
+  --color-background: #edf2fb;
+
+  --color-foreground: #2d3748;
+  --color-card: #ffffff;
+  --color-card-foreground: #2d3748;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #2d3748;
+  --color-primary: #abc4ff;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #e2eafc;
+  --color-secondary-foreground: #2d3748;
+  --color-muted: #f4f7fe;
+  --color-muted-foreground: #718096;
+  --color-accent: #c1d3fe;
+  --color-accent-foreground: #2d3748;
+  --color-destructive: #ff4d4f;
+  --color-border: #d7e3fc;
+  --color-input: #e2eafc;
+  --color-ring: #b6ccfe;
 
   --font-headline: var(--font-manrope);
   --font-body: var(--font-inter);
   --font-label: var(--font-inter);
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 body {
   font-family: var(--font-inter), sans-serif;
   background: var(--color-background);
-  color: var(--color-on-surface);
+  color: var(--color-foreground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -70,14 +113,79 @@ html {
   scroll-behavior: smooth;
 }
 
-.glass-nav {
-  backdrop-filter: blur(24px) saturate(120%);
-}
 .material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
 }
-.star-filled { font-variation-settings: 'FILL' 1; }
+.star-filled {
+  font-variation-settings: "FILL" 1;
+}
 
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #faf8ff; }
-::-webkit-scrollbar-thumb { background: #c5c5d4; border-radius: 10px; }
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #edf2fb;
+}
+::-webkit-scrollbar-thumb {
+  background: #b6ccfe;
+  border-radius: 10px;
+}
+
+:root {
+  --background: #edf2fb;
+  --foreground: #2d3748;
+  --card: #ffffff;
+  --card-foreground: #2d3748;
+  --popover: #ffffff;
+  --popover-foreground: #2d3748;
+  --primary: #abc4ff;
+  --primary-foreground: #ffffff;
+  --secondary: #e2eafc;
+  --secondary-foreground: #2d3748;
+  --muted: #f4f7fe;
+  --muted-foreground: #718096;
+  --accent: #c1d3fe;
+  --accent-foreground: #2d3748;
+  --destructive: #ff4d4f;
+  --border: #d7e3fc;
+  --input: #e2eafc;
+  --ring: #b6ccfe;
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: #1a202c;
+  --foreground: #edf2fb;
+  --card: #2d3748;
+  --card-foreground: #edf2fb;
+  --popover: #2d3748;
+  --popover-foreground: #edf2fb;
+  --primary: #c1d3fe;
+  --primary-foreground: #1a202c;
+  --secondary: #4a5568;
+  --secondary-foreground: #edf2fb;
+  --muted: #4a5568;
+  --muted-foreground: #a0aec0;
+  --accent: #b6ccfe;
+  --accent-foreground: #1a202c;
+  --destructive: #fc8181;
+  --border: #4a5568;
+  --input: #4a5568;
+  --ring: #c1d3fe;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}

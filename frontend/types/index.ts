@@ -24,6 +24,8 @@ export interface ILandlord {
   name: string;
   slug: string;
   city: string;
+  address?: string;
+  phone_number?: string;
   pincodes: string[];
   review_count: number;
   aggregate_score: AggregateScore;
