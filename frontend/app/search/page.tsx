@@ -39,10 +39,10 @@ function SearchResults() {
   }, [q, city]);
 
   return (
-    <div className="max-w-4xl mx-auto px-6 pt-8 pb-16 sm:pb-24 animate-in fade-in duration-500">
-      <div className="text-center mb-16">
-        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6 text-[#2d3748]">Registry</h1>
-        <p className="text-lg sm:text-xl font-medium max-w-2xl mx-auto leading-relaxed text-[#4a5568]">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 pb-12 sm:pb-24 animate-in fade-in duration-500">
+      <div className="text-center mb-10 sm:mb-16">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight mb-4 sm:mb-6 text-[#2d3748]">Registry</h1>
+        <p className="text-sm sm:text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed text-[#4a5568]">
           Search the database of landlord reviews across India by name, phone, address, or city.
         </p>
       </div>
@@ -69,12 +69,12 @@ function SearchResults() {
       )}
 
       {!loading && searched && landlords.length === 0 && (
-        <div className="py-20 px-8 border border-white/50 text-center bg-white/60 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_32px_rgba(31,56,100,0.06)]">
-          <div className="flex justify-center mb-6">
-             <SearchX className="w-16 h-16 text-[#abc4ff] opacity-50" />
+        <div className="py-12 sm:py-20 px-4 sm:px-8 border border-white/50 text-center bg-white/60 backdrop-blur-xl rounded-xl sm:rounded-[2rem] shadow-[0_8px_32px_rgba(31,56,100,0.06)]">
+          <div className="flex justify-center mb-4 sm:mb-6">
+             <SearchX className="w-12 h-12 sm:w-16 sm:h-16 text-[#abc4ff] opacity-50" />
           </div>
-          <h3 className="text-3xl font-bold mb-4 text-[#2d3748]">No records found</h3>
-          <p className="text-lg font-medium mb-12 max-w-md mx-auto leading-relaxed text-[#4a5568]">
+          <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 text-[#2d3748]">No records found</h3>
+          <p className="text-sm sm:text-lg font-medium mb-8 sm:mb-12 max-w-md mx-auto leading-relaxed text-[#4a5568]">
             {q
               ? `We don't have any reviews for "${q}" yet. Silence protects bad landlords.`
               : "Try searching by landlord name, address, or city."}

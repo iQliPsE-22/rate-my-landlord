@@ -38,15 +38,15 @@ export default function RootLayout({
         <Header />
 
         {/* Main content */}
-        <main className="flex-1 w-full pt-24 pb-24">{children}</main>
+        <main className="flex-1 w-full pt-16 sm:pt-24 pb-12 sm:pb-24">{children}</main>
 
         {/* Footer Shell */}
-        <footer className="bg-slate-50 dark:bg-slate-950 w-full py-12 mt-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center px-12 max-w-[1440px] mx-auto">
+        <footer className="bg-slate-50 dark:bg-slate-950 w-full py-8 sm:py-12 mt-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center px-4 sm:px-6 md:px-12 max-w-[1440px] mx-auto">
             <div className="font-headline font-bold text-slate-900 dark:text-slate-100 mb-6 md:mb-0 text-xl">
               RentersGuard
             </div>
-            <div className="flex flex-wrap justify-center gap-8 text-sm font-['Inter'] tracking-wide">
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-8 text-xs sm:text-sm font-['Inter'] tracking-wide">
               <Link
                 className="text-slate-500 dark:text-slate-400 hover:underline hover:text-indigo-700 transition-all"
                 href="#"

@@ -72,17 +72,17 @@ export default function LandlordPage() {
   }
 
   return (
-    <div className="px-6 md:px-12 max-w-[1440px] mx-auto pt-8 pb-32">
+    <div className="px-4 sm:px-6 md:px-12 max-w-[1440px] mx-auto pt-6 sm:pt-8 pb-16 sm:pb-32">
       {/* Header Section */}
-      <header className="mb-12">
-        <div className="flex items-end justify-between">
+      <header className="mb-8 sm:mb-12">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <nav className="flex gap-2 text-xs font-label uppercase tracking-widest text-[#718096] mb-4">
+            <nav className="flex gap-2 text-xs font-label uppercase tracking-widest text-[#718096] mb-3 sm:mb-4">
               <Link href="/" className="hover:text-[#abc4ff] cursor-pointer">Directory</Link>
               <span>/</span>
               <span className="text-[#4a5568] font-semibold">{landlord.city || "Unknown City"}</span>
             </nav>
-            <h1 className="text-5xl font-headline font-bold text-[#2d3748] tracking-tighter leading-none">Landlord Profile</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-headline font-bold text-[#2d3748] tracking-tighter leading-none">Landlord Profile</h1>
           </div>
           <div className="hidden lg:flex gap-4">
             <Link href="/submit" className="flex items-center gap-2 px-5 py-6 bg-white/70 backdrop-blur-xl border border-white/50 text-[#4a5568] hover:text-[#2d3748] font-headline font-bold rounded-xl hover:bg-white transition-all shadow-[0_8px_32px_rgba(31,56,100,0.06)]">
@@ -94,11 +94,11 @@ export default function LandlordPage() {
       </header>
 
       {/* Main Content Layout */}
-      <div className="grid grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
         
         {/* Left Column: Detailed Landlord Profile */}
-        <section className="col-span-12 lg:col-span-5 lg:sticky lg:top-32">
-          <div className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-[2rem] p-6 sm:p-8 shadow-[0_8px_32px_rgba(31,56,100,0.06)]">
+        <section className="lg:col-span-5 lg:sticky lg:top-32">
+          <div className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-xl sm:rounded-[2rem] p-5 sm:p-6 md:p-8 shadow-[0_8px_32px_rgba(31,56,100,0.06)]">
             
             <div className="flex items-start gap-6 mb-10">
               <div className="relative">
@@ -170,7 +170,7 @@ export default function LandlordPage() {
         </section>
 
         {/* Right Column: Testimonials & Reviews */}
-        <section className="col-span-12 lg:col-span-7 space-y-6 sm:space-y-8">
+        <section className="lg:col-span-7 space-y-4 sm:space-y-6 md:space-y-8">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-2xl font-headline font-bold text-[#2d3748]">Tenant Testimonials</h3>
             <span className="text-[#4a5568] text-sm font-label font-medium bg-[#edf2fb] px-3 py-1 rounded-lg">Sorted by Recent</span>

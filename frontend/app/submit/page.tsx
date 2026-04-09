@@ -94,16 +94,16 @@ export default function SubmitPage() {
   }
 
   return (
-    <div className="px-6 max-w-[800px] mx-auto pt-8 pb-16">
+    <div className="px-4 sm:px-6 max-w-[800px] mx-auto pt-6 sm:pt-8 pb-12 sm:pb-16">
         {/* Header Section */}
-        <header className="mb-12 text-center">
-            <h1 className="font-headline font-bold text-5xl text-[#2d3748] tracking-tighter mb-4">Share Your Experience</h1>
-            <p className="text-[#4a5568] text-lg max-w-md mx-auto">Help the community by providing an honest, anonymous review of your recent tenancy.</p>
+        <header className="mb-8 sm:mb-12 text-center">
+            <h1 className="font-headline font-bold text-3xl sm:text-4xl md:text-5xl text-[#2d3748] tracking-tighter mb-3 sm:mb-4">Share Your Experience</h1>
+            <p className="text-[#4a5568] text-sm sm:text-lg max-w-md mx-auto">Help the community by providing an honest, anonymous review of your recent tenancy.</p>
         </header>
 
         {/* Review Form Card */}
-        <Card className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-[2rem] shadow-[0_8px_32px_rgba(31,56,100,0.06)] overflow-hidden">
-            <CardContent className="p-6 sm:p-10">
+        <Card className="bg-white/60 backdrop-blur-xl border border-white/50 rounded-xl sm:rounded-[2rem] shadow-[0_8px_32px_rgba(31,56,100,0.06)] overflow-hidden">
+            <CardContent className="p-4 sm:p-6 md:p-10">
                 <form className="space-y-10" onSubmit={handleSubmit}>
                     {/* Basic Info */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
@@ -136,8 +136,8 @@ export default function SubmitPage() {
 
                     {/* Ratings Grid */}
                     <div className="pt-4 border-t border-white/50">
-                        <h3 className="font-headline font-bold text-xl mb-6 text-[#2d3748]">Performance Metrics *</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+                        <h3 className="font-headline font-bold text-lg sm:text-xl mb-4 sm:mb-6 text-[#2d3748]">Performance Metrics *</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 sm:gap-y-8 gap-x-8 sm:gap-x-12">
                             {renderStars("deposit_return", "Security Deposit Return")}
                             {renderStars("maintenance", "Maintenance Speed")}
                             {renderStars("behaviour", "Professionalism")}
@@ -154,7 +154,7 @@ export default function SubmitPage() {
                                     key={flag.id}
                                     type="button"
                                     variant="ghost"
-                                    className={`px-5 py-6 rounded-xl transition-all font-bold text-sm shadow-sm ${redFlags.includes(flag.id) ? 'bg-rose-50 text-rose-500 border border-rose-200 hover:bg-rose-100 hover:text-rose-600' : 'bg-white/60 border border-white/50 text-[#4a5568] hover:bg-rose-50 hover:text-rose-500 hover:border-rose-100'}`} 
+                                    className={`px-3 sm:px-5 py-3 sm:py-6 rounded-lg sm:rounded-xl transition-all font-bold text-xs sm:text-sm shadow-sm ${redFlags.includes(flag.id) ? 'bg-rose-50 text-rose-500 border border-rose-200 hover:bg-rose-100 hover:text-rose-600' : 'bg-white/60 border border-white/50 text-[#4a5568] hover:bg-rose-50 hover:text-rose-500 hover:border-rose-100'}`} 
                                     onClick={() => toggleRedFlag(flag.id)}
                                 >
                                     {flag.label}
@@ -186,7 +186,7 @@ export default function SubmitPage() {
                         <Button 
                             disabled={submitting}
                             type="submit"
-                            className="w-full h-16 bg-[#abc4ff] text-white font-headline font-bold text-lg rounded-2xl shadow-[0_4px_12px_rgba(171,196,255,0.4)] hover:shadow-[0_8px_24px_rgba(171,196,255,0.6)] hover:bg-[#b6ccfe] transition-all flex items-center justify-center gap-2 group" 
+                            className="w-full h-14 sm:h-16 bg-[#abc4ff] text-white font-headline font-bold text-base sm:text-lg rounded-xl sm:rounded-2xl shadow-[0_4px_12px_rgba(171,196,255,0.4)] hover:shadow-[0_8px_24px_rgba(171,196,255,0.6)] hover:bg-[#b6ccfe] transition-all flex items-center justify-center gap-2 group" 
                         >
                             {submitting ? "Publishing..." : "Publish Review"}
                             {!submitting && <span className="text-xl rotate-0 group-hover:translate-x-1 transition-transform">→</span>}

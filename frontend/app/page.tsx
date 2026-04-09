@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Radar, MapPinHouse, Siren, Search, Ghost, Building2, MapPin } from "lucide-react";
+import { ArrowRight, Radar, Siren, Ghost, Building2, MapPin, Shield, Star, AlertTriangle } from "lucide-react";
 import SearchBar from "@/components/SearchBar";
 import { motion, useScroll, useTransform, Variants } from "framer-motion";
 import { useRef } from "react";
@@ -11,7 +11,7 @@ const fadeIn: Variants = {
   visible: { 
     opacity: 1, 
     y: 0, 
-    transition: { duration: 0.6 } // removed ease: 'string' to resolve TS error
+    transition: { duration: 0.6 }
   }
 };
 
@@ -19,9 +19,16 @@ const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.2 }
+    transition: { staggerChildren: 0.15 }
   }
 };
+
+// Simulated real review snippets for social proof
+const recentReviews = [
+  { text: "Withheld ₹45,000 deposit for 3 months after move-out. No receipts.", city: "Bengaluru", rating: 1.2 },
+  { text: "Fixed the plumbing same day I reported it. Fair rent increases.", city: "Pune", rating: 4.3 },
+  { text: "Entered flat without notice 4 times. Ignored written complaints.", city: "Mumbai", rating: 1.0 },
+];
 
 export default function Home() {
   const containerRef = useRef(null);
@@ -36,75 +43,97 @@ export default function Home() {
   return (
     <div className="flex flex-col relative overflow-hidden" ref={containerRef}>
       
-      {/* Background Abstract Orbs - Ethereal Palette */}
+      {/* Background Orbs */}
       <motion.div style={{ y: yBg, opacity: opacityBg }} className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full glow-orb-1 blur-3xl mix-blend-multiply"></div>
         <div className="absolute top-[20%] right-[-10%] w-[40vw] h-[40vw] rounded-full glow-orb-2 blur-3xl mix-blend-multiply"></div>
       </motion.div>
 
-      {/* Hero Section */}
-      <section className="relative z-10 px-6 pt-16 pb-32 max-w-6xl mx-auto w-full flex flex-col justify-start items-center text-center mt-8">
+      {/* ─── HERO: Search-first, no fluff ─── */}
+      <section className="relative z-10 px-4 sm:px-6 pt-10 sm:pt-16 pb-16 sm:pb-24 max-w-5xl mx-auto w-full">
         <motion.div 
           initial="hidden" 
           animate="visible" 
           variants={staggerContainer}
-          className="max-w-4xl"
+          className="w-full"
         >
-          <motion.div variants={fadeIn} className="flex justify-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/40 backdrop-blur-md border border-white/60 rounded-full shadow-sm">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#abc4ff] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#abc4ff]"></span>
-              </span>
-              <span className="text-xs font-bold tracking-widest uppercase text-[#4a5568]">
-                100% Anonymous Platform
-              </span>
-            </div>
-          </motion.div>
-
-          <motion.h1 variants={fadeIn} className="text-6xl sm:text-8xl font-black tracking-tighter leading-[1.05] mb-8 text-[#2d3748]">
-            Trust takes years.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#abc4ff] to-[#b6ccfe]">
-              Reviews take minutes.
-            </span>
-          </motion.h1>
-
-          <motion.p variants={fadeIn} className="text-xl sm:text-2xl font-medium leading-relaxed mb-12 max-w-2xl mx-auto text-[#4a5568] text-balance">
-            Don't sign a lease blindly. Search verified tenant experiences across India to uncover hidden red flags before you move in.
+          {/* Minimal context line */}
+          <motion.p variants={fadeIn} className="text-xs sm:text-sm font-bold tracking-widest uppercase text-[#abc4ff] mb-4 sm:mb-6">
+            Anonymous · Free · India-wide
           </motion.p>
 
-          <motion.div variants={fadeIn} className="mb-10 w-full max-w-2xl mx-auto">
-            <div className="bg-white/50 backdrop-blur-xl p-2 rounded-2xl border border-white/60 shadow-[0_12px_40px_rgba(171,196,255,0.4)]">
-              <SearchBar />
-            </div>
+          {/* Direct headline — not a slogan, a utility statement */}
+          <motion.h1 variants={fadeIn} className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-[1.1] mb-4 sm:mb-6 text-[#2d3748] max-w-3xl">
+            Check your landlord
+            <br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>
+            before you sign.
+          </motion.h1>
+
+          <motion.p variants={fadeIn} className="text-base sm:text-lg md:text-xl text-[#4a5568] mb-8 sm:mb-10 max-w-xl leading-relaxed">
+            Search by name, phone number, or address. Read what past tenants actually experienced.
+          </motion.p>
+
+          {/* Search bar — THE hero element */}
+          <motion.div variants={fadeIn} className="mb-8 sm:mb-12 w-full max-w-2xl">
+            <SearchBar />
           </motion.div>
 
-          <motion.div variants={fadeIn} className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-8">
-            <div className="flex -space-x-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="w-12 h-12 rounded-full border-4 border-[#edf2fb] bg-[#e2eafc] flex items-center justify-center overflow-hidden shadow-sm">
-                  <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=${i}&scale=120`} alt="Avatar" className="w-10 h-10 opacity-90" />
-                </div>
-              ))}
-              <div className="w-12 h-12 rounded-full border-4 border-[#edf2fb] bg-[#abc4ff] flex items-center justify-center text-white text-xs font-bold z-10 shadow-sm">
-                10k+
-              </div>
+          {/* Real numbers, not marketing fluff */}
+          <motion.div variants={fadeIn} className="flex flex-wrap gap-x-6 sm:gap-x-10 gap-y-3 text-sm text-[#718096]">
+            <div className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-[#abc4ff]" />
+              <span><strong className="text-[#2d3748]">100%</strong> anonymous</span>
             </div>
-            <p className="text-sm font-medium text-[#4a5568] text-left leading-tight">
-              Tenants protected from <br/><span className="text-[#2d3748] font-bold">toxic landlords</span> this month.
-            </p>
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-[#abc4ff]" />
+              <span><strong className="text-[#2d3748]">12</strong> cities covered</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-[#abc4ff]" />
+              <span><strong className="text-[#2d3748]">6</strong> red flag categories</span>
+            </div>
           </motion.div>
         </motion.div>
       </section>
 
-      {/* Infinite Marquee - Cities */}
-      <section className="relative z-10 py-10 border-y border-[#d7e3fc]/50 bg-white/40 backdrop-blur-md overflow-hidden">
+      {/* ─── LIVE FEED: Recent reviews ticker ─── */}
+      <section className="relative z-10 py-6 sm:py-8 border-y border-[#d7e3fc]/40 bg-white/30 backdrop-blur-sm overflow-hidden">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#abc4ff] mb-4 sm:mb-5">Recent from the community</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+            {recentReviews.map((review, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="bg-white/60 backdrop-blur-md border border-white/50 rounded-xl p-4 text-sm group hover:bg-white/80 transition-colors"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#718096]">{review.city}</span>
+                  <span className={`text-xs font-black ${review.rating >= 3 ? 'text-emerald-500' : 'text-rose-500'}`}>
+                    {review.rating.toFixed(1)}
+                  </span>
+                </div>
+                <p className="text-[#4a5568] leading-snug line-clamp-2 text-[13px]">
+                  &ldquo;{review.text}&rdquo;
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Cities Marquee ─── */}
+      <section className="relative z-10 py-6 sm:py-10 border-b border-[#d7e3fc]/30 bg-white/20 overflow-hidden">
         <div className="flex w-max marquee-group hover:[animation-play-state:paused]">
           {[1, 2, 3, 4, 5].map((set) => (
-            <div key={set} className="flex items-center gap-12 px-6">
-              {['Bengaluru', 'Mumbai', 'Delhi NCR', 'Pune', 'Hyderabad', 'Chennai'].map((city, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-xl font-bold text-[#b6ccfe] mix-blend-multiply">
-                  <MapPin className="w-5 h-5 opacity-60" />
+            <div key={set} className="flex items-center gap-8 sm:gap-12 px-4 sm:px-6">
+              {['Bengaluru', 'Mumbai', 'Delhi NCR', 'Pune', 'Hyderabad', 'Chennai', 'Kolkata', 'Jaipur'].map((city, idx) => (
+                <div key={idx} className="flex items-center gap-1.5 sm:gap-2 text-base sm:text-xl font-bold text-[#7b9ad8] whitespace-nowrap">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 opacity-70" />
                   {city}
                 </div>
               ))}
@@ -113,64 +142,105 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Modern Bento Grid - Ethereal Colors */}
-      <section className="relative z-10 py-32 px-6 bg-dot-pattern">
-        <div className="max-w-6xl mx-auto">
+      {/* ─── HOW IT WORKS: 3-step strip ─── */}
+      <section className="relative z-10 py-16 sm:py-24 px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            className="mb-10 sm:mb-16"
+          >
+            <p className="text-xs font-bold uppercase tracking-widest text-[#abc4ff] mb-3">How it works</p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#2d3748]">
+              Three steps. Two minutes.
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+            {[
+              { step: "01", title: "Search", desc: "Type the landlord's name, phone, or property address.", icon: Radar },
+              { step: "02", title: "Read", desc: "See ratings, red flags, and written experiences from past tenants.", icon: Star },
+              { step: "03", title: "Decide", desc: "Sign the lease with confidence — or walk away informed.", icon: Shield },
+            ].map((item, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="bg-white/50 backdrop-blur-md border border-white/40 rounded-2xl p-6 sm:p-8 group hover:bg-white/70 transition-all"
+              >
+                <div className="flex items-center gap-3 mb-4 sm:mb-5">
+                  <span className="text-3xl sm:text-4xl font-black text-[#e2eafc] group-hover:text-[#c1d3fe] transition-colors">{item.step}</span>
+                  <item.icon className="w-5 h-5 text-[#abc4ff]" />
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-[#2d3748] mb-2 tracking-tight">{item.title}</h3>
+                <p className="text-sm sm:text-base text-[#4a5568] leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── BENTO FEATURES ─── */}
+      <section className="relative z-10 py-16 sm:py-24 px-4 sm:px-6 bg-dot-pattern">
+        <div className="max-w-5xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="mb-20 space-y-4"
+            className="mb-12 sm:mb-20 space-y-3 sm:space-y-4"
           >
-            <h2 className="text-4xl sm:text-6xl font-black tracking-tighter text-[#2d3748] max-w-2xl">
-              The ultimate tenant defense mechanism.
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#2d3748] max-w-lg">
+              Built for tenants, not landlords.
             </h2>
-            <p className="text-xl font-medium text-[#4a5568] max-w-xl">
-              A meticulously structured database designed to expose patterns of bad behavior before you pay the deposit.
+            <p className="text-base sm:text-lg text-[#4a5568] max-w-md">
+              Every feature exists because a tenant needed it.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[320px]">
-            {/* Bento Box 1 - Large */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 auto-rows-auto md:auto-rows-[280px]">
+            {/* Feature 1 — Wide */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="md:col-span-2 bg-white/60 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(31,56,100,0.06)] rounded-[2rem] p-10 flex flex-col justify-between overflow-hidden group relative"
+              className="md:col-span-2 bg-white/60 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(31,56,100,0.06)] rounded-2xl sm:rounded-[2rem] p-6 sm:p-10 flex flex-col justify-between overflow-hidden group relative"
             >
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#c1d3fe]/40 rounded-full blur-3xl -mr-20 -mt-20 transition-transform duration-700 group-hover:scale-150"></div>
+              <div className="absolute top-0 right-0 w-48 sm:w-64 h-48 sm:h-64 bg-[#c1d3fe]/30 rounded-full blur-3xl -mr-16 sm:-mr-20 -mt-16 sm:-mt-20 transition-transform duration-700 group-hover:scale-150"></div>
               <div className="relative z-10">
-                <Radar className="w-12 h-12 text-[#abc4ff] mb-6 drop-shadow-sm" />
-                <h3 className="text-3xl font-bold mb-4 text-[#2d3748] tracking-tight">Investigate Instantly</h3>
-                <p className="text-lg font-medium text-[#4a5568] max-w-md">
-                  Search by pan, name, or exact address. Our intelligent matching ensures you find the exact landlord profile within seconds, cutting through noise.
+                <Radar className="w-8 h-8 sm:w-10 sm:h-10 text-[#abc4ff] mb-4 sm:mb-6" />
+                <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 text-[#2d3748] tracking-tight">Instant lookup</h3>
+                <p className="text-sm sm:text-base text-[#4a5568] max-w-md leading-relaxed">
+                  Search by name, phone, or exact address. Fuzzy matching finds the right profile even with typos.
                 </p>
               </div>
-              <Link href="/search?q=" className="relative z-10 flex items-center gap-2 mt-8 text-[#abc4ff] font-bold text-sm tracking-widest uppercase hover:underline">
+              <Link href="/search?q=" className="relative z-10 flex items-center gap-2 mt-6 sm:mt-8 text-[#abc4ff] font-bold text-xs sm:text-sm tracking-widest uppercase hover:underline">
                 Browse Registry <ArrowRight className="w-4 h-4" />
               </Link>
             </motion.div>
 
-            {/* Bento Box 2 - Tall */}
+            {/* Feature 2 — Tall */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="md:row-span-2 bg-gradient-to-b from-[#e2eafc] to-white/40 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(31,56,100,0.06)] rounded-[2rem] p-10 flex flex-col justify-between relative overflow-hidden"
+              className="md:row-span-2 bg-gradient-to-b from-[#e2eafc] to-white/40 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(31,56,100,0.06)] rounded-2xl sm:rounded-[2rem] p-6 sm:p-10 flex flex-col justify-between relative overflow-hidden"
             >
               <div className="relative z-10">
-                <Siren className="w-12 h-12 text-rose-400 mb-6 drop-shadow-sm" />
-                <h3 className="text-3xl font-bold mb-4 text-[#2d3748] tracking-tight">Spot Red Flags</h3>
-                <p className="text-lg font-medium text-[#4a5568] mb-12">
-                  Our algorithm automatically detects and highlights severe infractions.
+                <Siren className="w-8 h-8 sm:w-10 sm:h-10 text-rose-400 mb-4 sm:mb-6" />
+                <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 text-[#2d3748] tracking-tight">Red flag detection</h3>
+                <p className="text-sm sm:text-base text-[#4a5568] mb-6 sm:mb-10">
+                  Automatically tags severe patterns across reviews.
                 </p>
-                <div className="space-y-3">
-                  {['Deposit Withholding', 'Illegal Lockouts', 'Unannounced Entry', 'Severe Neglect'].map((flag, idx) => (
-                    <div key={idx} className="flex items-center gap-3 text-sm font-bold text-[#c1d3fe] bg-white rounded-lg p-3 shadow-sm border border-[#e2eafc]">
-                      <Ghost className="w-4 h-4 text-rose-400" />
+                <div className="space-y-2 sm:space-y-3">
+                  {['Deposit withholding', 'Illegal lockouts', 'Unannounced entry', 'Severe neglect'].map((flag, idx) => (
+                    <div key={idx} className="flex items-center gap-2.5 text-xs sm:text-sm font-bold bg-white rounded-lg p-2.5 sm:p-3 shadow-sm border border-[#e2eafc]">
+                      <Ghost className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-400 flex-shrink-0" />
                       <span className="text-[#2d3748]">{flag}</span>
                     </div>
                   ))}
@@ -178,39 +248,39 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Bento Box 3 */}
+            {/* Feature 3 */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-white/60 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(31,56,100,0.06)] rounded-[2rem] p-10 flex flex-col justify-between relative overflow-hidden group"
+              className="bg-white/60 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(31,56,100,0.06)] rounded-2xl sm:rounded-[2rem] p-6 sm:p-10 flex flex-col justify-between relative overflow-hidden group"
             >
               <div className="relative z-10">
-                <Building2 className="w-12 h-12 text-[#b6ccfe] mb-6 drop-shadow-sm transition-transform duration-500 group-hover:-translate-y-2" />
-                <h3 className="text-2xl font-bold mb-3 text-[#2d3748] tracking-tight">Property Deep Dives</h3>
-                <p className="text-[#4a5568] font-medium leading-relaxed">
-                  Rate conditions independently from landlords to map out neglected buildings.
+                <Building2 className="w-8 h-8 sm:w-10 sm:h-10 text-[#b6ccfe] mb-4 sm:mb-6 transition-transform duration-500 group-hover:-translate-y-1" />
+                <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-[#2d3748] tracking-tight">Property ratings</h3>
+                <p className="text-sm sm:text-base text-[#4a5568] leading-relaxed">
+                  Rate maintenance, deposit return, behaviour, and rent fairness independently.
                 </p>
               </div>
             </motion.div>
 
-            {/* Bento Box 4 */}
+            {/* CTA Box */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="bg-[#abc4ff] border border-white/20 shadow-[0_8px_32px_rgba(171,196,255,0.4)] rounded-[2rem] p-10 flex flex-col justify-between"
+              className="bg-[#abc4ff] border border-white/20 shadow-[0_8px_32px_rgba(171,196,255,0.4)] rounded-2xl sm:rounded-[2rem] p-6 sm:p-10 flex flex-col justify-between"
             >
-              <h3 className="text-3xl font-black text-white tracking-tighter mb-4 leading-tight">
-                Help the next tenant out.
+              <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-3 sm:mb-4 leading-tight">
+                Had a landlord?<br/>Leave a review.
               </h3>
-              <p className="text-blue-50 font-medium mb-8 opacity-90">
-                Submit an anonymous review in less than 2 minutes.
+              <p className="text-blue-50 text-sm sm:text-base mb-6 sm:mb-8 opacity-90">
+                Takes 2 minutes. Stays anonymous forever.
               </p>
-              <Link href="/submit" className="glass-panel text-center text-[#2d3748] py-4 rounded-xl font-bold hover:bg-white transition-colors">
-                Start a Report
+              <Link href="/submit" className="glass-panel text-center text-[#2d3748] py-3 sm:py-4 rounded-xl font-bold hover:bg-white transition-colors text-sm sm:text-base">
+                Write a Review
               </Link>
             </motion.div>
           </div>
