@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd /mnt/c/Users/deepa/Desktop/rate-my-landlord/frontend && npx tsc --noEmit 2>&1",
+            "command": "cd C:\\Users\\deepa\\Desktop\\rate-my-landlord\\frontend && npx tsc --noEmit 2>&1",
             "timeout": 60,
             "statusMessage": "Running TypeScript type check..."
           }
@@ -20,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd /mnt/c/Users/deepa/Desktop/rate-my-landlord/frontend && npx tsc --noEmit 2>&1",
+            "command": "cd C:\\Users\\deepa\\Desktop\\rate-my-landlord\\frontend && npx tsc --noEmit 2>&1",
             "timeout": 60,
             "statusMessage": "Type-checking before push..."
           }
