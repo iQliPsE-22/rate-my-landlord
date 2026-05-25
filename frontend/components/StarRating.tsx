@@ -14,7 +14,7 @@ export default function StarRating({
   size = "md",
 }: StarRatingProps) {
   const stars = [1, 2, 3, 4, 5];
-  
+
   const sizeMap = {
     sm: "w-4 h-4",
     md: "w-6 h-6",
@@ -40,8 +40,8 @@ export default function StarRating({
               ${sizeMap[size]} transition-colors duration-200
               ${
                 star <= value
-                  ? "fill-[#1C1917] stroke-[#1C1917]" // active — black
-                  : "fill-transparent stroke-[#D6D3D1]" // inactive — stone-300
+                  ? "fill-gray-950 stroke-gray-950" // active
+                  : "fill-transparent stroke-gray-300" // inactive
               }
             `}
           />

@@ -11,8 +11,8 @@ export default function ReviewItem({ review }: ReviewItemProps) {
   const overallScore = Object.values(review.ratings).reduce((a, b) => a + b, 0) / 4;
 
   return (
-    <div className="group pl-0 sm:pl-6 border-l-2 transition-colors duration-300" style={{ borderColor: "var(--border)" }} onMouseEnter={(e) => e.currentTarget.style.borderColor = "var(--text)"} onMouseLeave={(e) => e.currentTarget.style.borderColor = "var(--border)"}>
-      
+    <div className="group pl-0 md:pl-6 border-l-2 transition-colors duration-300" style={{ borderColor: "var(--border)" }} onMouseEnter={(e) => e.currentTarget.style.borderColor = "var(--text)"} onMouseLeave={(e) => e.currentTarget.style.borderColor = "var(--border)"}>
+
       {/* Meta Header */}
       <div className="flex flex-wrap items-center gap-3 mb-6 text-xs font-bold tracking-widest uppercase">
         <span className="bg-stone-900 text-white px-2 py-1 rounded-sm">
@@ -37,8 +37,8 @@ export default function ReviewItem({ review }: ReviewItemProps) {
       </div>
 
       {/* Flags & Sub-ratings grid */}
-      <div className="grid sm:grid-cols-2 gap-6 bg-stone-50 p-6 rounded-sm border border-stone-200">
-        
+      <div className="grid md:grid-cols-2 gap-6 bg-stone-50 p-6 rounded-sm border border-stone-200">
+
         {/* Left: Ratings Grid */}
         <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-sm">
           {(Object.entries(review.ratings) as [keyof typeof RATING_LABELS, number][]).map(([key, val]) => {
@@ -53,8 +53,8 @@ export default function ReviewItem({ review }: ReviewItemProps) {
 
         {/* Right: Flags */}
         {flags.length > 0 && (
-          <div className="border-t sm:border-t-0 sm:border-l border-stone-200 pt-4 sm:pt-0 sm:pl-6">
-            <h4 className="text-[10px] uppercase font-bold tracking-widest text-red-600 mb-3">Reported Flags</h4>
+          <div className="border-t md:border-t-0 md:border-l border-stone-200 pt-4 md:pt-0 md:pl-6">
+            <h4 className="text-xs uppercase font-bold tracking-widest text-red-600 mb-3">Reported Flags</h4>
             <div className="flex flex-wrap gap-2">
               {flags.map((flag) => (
                 <span key={flag?.id} className="text-xs font-bold px-2 py-1 bg-red-50 text-red-700 border border-red-200 rounded-sm inline-flex items-center gap-1">
@@ -65,7 +65,7 @@ export default function ReviewItem({ review }: ReviewItemProps) {
           </div>
         )}
       </div>
-      
+
     </div>
   );
 }

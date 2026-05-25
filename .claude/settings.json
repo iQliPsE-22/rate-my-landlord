@@ -1,0 +1,31 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /mnt/c/Users/deepa/Desktop/rate-my-landlord/frontend && npx tsc --noEmit 2>&1",
+            "timeout": 60,
+            "statusMessage": "Running TypeScript type check..."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "if": "Bash(git push *)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /mnt/c/Users/deepa/Desktop/rate-my-landlord/frontend && npx tsc --noEmit 2>&1",
+            "timeout": 60,
+            "statusMessage": "Type-checking before push..."
+          }
+        ]
+      }
+    ]
+  }
+}

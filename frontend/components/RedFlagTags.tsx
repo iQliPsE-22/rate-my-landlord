@@ -26,8 +26,8 @@ export default function RedFlagTags({ selected, onChange }: RedFlagTagsProps) {
             onClick={() => toggle(flag.id)}
             className={`
               px-4 py-3 rounded-sm text-sm font-bold border transition-all duration-200 text-left flex items-center gap-3
-              ${isSelected 
-                ? "bg-red-50 border-red-600 text-red-700 shadow-[2px_2px_0px_rgba(220,38,38,1)]" 
+              ${isSelected
+                ? "bg-red-50 border-red-600 text-red-700 shadow-flag"
                 : "bg-white border-stone-200 text-stone-600 hover:border-stone-400"
               }
             `}

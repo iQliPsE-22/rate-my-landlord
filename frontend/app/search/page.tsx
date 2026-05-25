@@ -39,10 +39,10 @@ function SearchResults() {
   }, [q, city]);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 pb-12 sm:pb-24 animate-in fade-in duration-500">
-      <div className="text-center mb-10 sm:mb-16">
-        <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight mb-4 sm:mb-6 text-[#2d3748]">Registry</h1>
-        <p className="text-sm sm:text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed text-[#4a5568]">
+    <div className="max-w-4xl mx-auto px-4 md:px-6 pt-6 md:pt-8 pb-12 md:pb-24 animate-in fade-in duration-500">
+      <div className="text-center mb-10 md:mb-16">
+        <h1 className="text-3xl md:text-4xl lg:text-6xl font-extrabold tracking-tight mb-4 md:mb-6 text-text-heading">Registry</h1>
+        <p className="text-sm md:text-lg lg:text-xl font-medium max-w-2xl mx-auto leading-relaxed text-text-body">
           Search the database of landlord reviews across India by name, phone, address, or city.
         </p>
       </div>
@@ -57,7 +57,7 @@ function SearchResults() {
         <div className="space-y-6">
           <div className="h-6 w-32 bg-slate-200 rounded animate-pulse mb-8" />
           {[1, 2, 3].map((i) => (
-            <div key={i} className="p-6 border border-white/50 rounded-[2rem] bg-white/60 animate-pulse flex flex-col sm:flex-row gap-6">
+            <div key={i} className="p-6 border border-white/50 rounded-2xl bg-white/60 animate-pulse flex flex-col md:flex-row gap-6">
               <div className="flex-1 space-y-4">
                 <div className="h-8 w-3/4 bg-slate-200 rounded" />
                 <div className="h-4 w-1/2 bg-slate-200 rounded" />
@@ -69,12 +69,12 @@ function SearchResults() {
       )}
 
       {!loading && searched && landlords.length === 0 && (
-        <div className="py-12 sm:py-20 px-4 sm:px-8 border border-white/50 text-center bg-white/60 backdrop-blur-xl rounded-xl sm:rounded-[2rem] shadow-[0_8px_32px_rgba(31,56,100,0.06)]">
-          <div className="flex justify-center mb-4 sm:mb-6">
-             <SearchX className="w-12 h-12 sm:w-16 sm:h-16 text-[#abc4ff] opacity-50" />
+        <div className="py-12 md:py-20 px-4 md:px-8 border border-white/50 text-center bg-white/60 backdrop-blur-xl rounded-xl md:rounded-2xl shadow-card">
+          <div className="flex justify-center mb-4 md:mb-6">
+             <SearchX className="w-12 h-12 md:w-16 md:h-16 text-accent opacity-50" />
           </div>
-          <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 text-[#2d3748]">No records found</h3>
-          <p className="text-sm sm:text-lg font-medium mb-8 sm:mb-12 max-w-md mx-auto leading-relaxed text-[#4a5568]">
+          <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 text-text-heading">No records found</h3>
+          <p className="text-sm md:text-lg font-medium mb-8 md:mb-12 max-w-md mx-auto leading-relaxed text-text-body">
             {q
               ? `We don't have any reviews for "${q}" yet. Silence protects bad landlords.`
               : "Try searching by landlord name, address, or city."}
@@ -82,7 +82,7 @@ function SearchResults() {
           {q && (
             <Link
               href={`/submit?q=${encodeURIComponent(q)}`}
-              className="inline-flex items-center gap-3 justify-center font-bold px-8 py-4 rounded-xl transition-transform hover:-translate-y-1 shadow-[0_4px_12px_rgba(171,196,255,0.4)] bg-[#abc4ff] text-white hover:bg-[#b6ccfe]"
+              className="inline-flex items-center gap-3 justify-center font-bold px-8 py-4 rounded-xl transition-transform hover:-translate-y-1 shadow-accent bg-accent text-white hover:bg-blue-400"
             >
               <FilePlus className="w-5 h-5" /> Be the first to add a review
             </Link>
@@ -93,8 +93,8 @@ function SearchResults() {
       {!loading && landlords.length > 0 && (
         <div className="animate-in slide-in-from-bottom-4 duration-500 fade-in">
           <div className="flex items-end justify-between border-b pb-6 mb-8 border-slate-200">
-            <h2 className="text-2xl font-bold text-[#2d3748]">Results</h2>
-            <p className="text-sm font-bold uppercase tracking-widest py-1 px-3 bg-[#edf2fb] rounded-full text-[#abc4ff]">
+            <h2 className="text-2xl font-bold text-text-heading">Results</h2>
+            <p className="text-sm font-bold uppercase tracking-widest py-1 px-3 bg-bg-subtle rounded-full text-accent">
               {landlords.length} {landlords.length === 1 ? "Match" : "Matches"}
             </p>
           </div>
