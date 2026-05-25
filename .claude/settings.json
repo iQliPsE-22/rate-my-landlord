@@ -16,10 +16,10 @@
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "if": "Bash(git push *)",
         "hooks": [
           {
             "type": "command",
+            "if": "Bash(git push *)",
             "command": "cd C:\\Users\\deepa\\Desktop\\rate-my-landlord\\frontend && npx tsc --noEmit 2>&1",
             "timeout": 60,
             "statusMessage": "Type-checking before push..."
